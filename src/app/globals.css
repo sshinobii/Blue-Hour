@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Core Light Design Tokens (Bluehour Light Redesign) ──── */
+  --color-bg:        #FBFAF3;
+  --color-card:      #FFFFFF;
+  --color-line:      #E7E5D8;
+  --color-ink:       #15150F;
+  --color-sub:       #5B5B52;
+  --color-h1:        #F1EFE1;
+  --color-h2:        #D3D1C3;
+  --color-h3:        #B4B2A4;
+  --color-neon:      #CCFF00;
+  --color-neon-ink:  #3A4A00;
+
+  /* Legacy utility mapped colors for compatibility */
+  --color-bg-base:    #FBFAF3;
+  --color-bg-mid:     #F4F3E8;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-card:    #FFFFFF;
+  --color-text-primary:   #15150F;
+  --color-text-secondary: #5B5B52;
+  --color-text-muted:     #B4B2A4;
+  --color-gold:       #CCFF00;
+
+  /* ── Typography ───────────────────────────────────── */
+  --font-sans:   'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+:root {
+  --bg: #FBFAF3;
+  --card: #FFFFFF;
+  --line: #E7E5D8;
+  --ink: #15150F;
+  --sub: #5B5B52;
+  --h1: #F1EFE1;
+  --h2: #D3D1C3;
+  --h3: #B4B2A4;
+  --neon: #CCFF00;
+  --neon-ink: #3A4A00;
+
+  --background: #FBFAF3;
+  --foreground: #15150F;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Utilities for Bluehour Light Aesthetic */
+.screen {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tag-badge {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--neon-ink);
+  font-weight: 800;
+  margin-bottom: 14px;
+  background: var(--neon);
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+.btn-dark {
+  background: var(--ink);
+  color: var(--neon);
+  border: none;
+  padding: 11px 20px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.btn-dark:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.btn-lime {
+  background: var(--neon);
+  color: var(--neon-ink);
+  border: none;
+  padding: 11px 20px;
+  border-radius: 100px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.btn-lime:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.card-light {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-light:hover {
+  border-color: #C5C2AF;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+}
+
+.promptbar-input {
+  background: transparent;
+  border: none;
+  color: var(--ink);
+  font-size: 15px;
+  outline: none;
+}
+.promptbar-input::placeholder {
+  color: var(--h3);
+}
+
+.chip-item {
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--sub);
+  font-size: 12.5px;
+  padding: 8px 14px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.chip-item:hover {
+  background: #F4F3E8;
+  color: var(--ink);
+  border-color: #D3D1C3;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--h3); }
