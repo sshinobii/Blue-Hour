@@ -45,6 +45,6 @@ yarn-error.log*
 next-env.d.ts
 
 # local prompt and reference files
-BLUEHOUR_DEV_PROMPT*
+BLUEHOUR_*
 bluehour_redesign_light*
 

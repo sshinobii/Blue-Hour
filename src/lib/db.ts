@@ -8,6 +8,7 @@ export interface Profile {
   wallet_address: string | null;
   external_wallet_address: string | null;
   tier: string;
+  subscription_tier?: string;
   hour_balance_cached: number;
   created_at?: string;
 }
@@ -95,6 +96,7 @@ const INITIAL_PROFILES: Profile[] = [
     wallet_address: '0x8f2c...c91a',
     external_wallet_address: null,
     tier: 'Nomad',
+    subscription_tier: 'free',
     hour_balance_cached: 4280,
     created_at: new Date().toISOString(),
   }

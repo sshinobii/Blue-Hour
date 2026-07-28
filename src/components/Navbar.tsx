@@ -29,10 +29,11 @@ export const Navbar: React.FC = () => {
       <header className="w-full bg-[#FBFAF3] border-b border-[#E7E5D8]">
         <div className="max-w-[1200px] mx-auto px-6 sm:px-12 h-[72px] flex items-center justify-between">
           
-          {/* Logo */}
+          {/* Logo with Wren icon slot */}
           <Link href="/" className="flex items-center gap-2.5 font-black text-[18px] text-[#15150F] no-underline">
-            <div className="w-[26px] h-[26px] rounded-[7px] bg-[#15150F] text-[#CCFF00] flex items-center justify-center font-black text-[14px]">
+            <div className="w-[26px] h-[26px] rounded-[7px] bg-[#15150F] text-[#CCFF00] flex items-center justify-center font-black text-[14px] relative">
               b
+              <span className="absolute -top-1 -right-1 text-[10px]" title="Wren companion active">🕊️</span>
             </div>
             Bluehour
           </Link>

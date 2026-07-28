@@ -4,16 +4,19 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { WalletGate } from '@/components/WalletGate';
 import { useWallet } from '@/context/WalletContext';
 import { dbClient, Route, RewardLedgerItem } from '@/lib/db';
 
 export default function ProfilePage() {
-  const { publicKey, hourBalance, tier, profile } = useWallet();
+  const { connected, publicKey, hourBalance, tier, profile } = useWallet();
 
   const [createdRoutes, setCreatedRoutes] = useState<Route[]>([]);
   const [ledger, setLedger] = useState<RewardLedgerItem[]>([]);
 
   useEffect(() => {
+    if (!connected) return;
+
     const loadProfileData = async () => {
       const routes = await dbClient.getRoutes();
       setCreatedRoutes(routes);
@@ -23,7 +26,22 @@ export default function ProfilePage() {
     };
 
     loadProfileData();
-  }, [publicKey]);
+  }, [connected, publicKey]);
+
+  if (!connected) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#FBFAF3] text-[#15150F]">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <WalletGate
+            title="Sign in to view Profile"
+            description="Access your saved journeys, proof gallery, and $HOUR token rewards on Robinhood Chain."
+          />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   const displayAddress = publicKey
     ? `${publicKey.slice(0, 5)}...${publicKey.slice(-4)}`
