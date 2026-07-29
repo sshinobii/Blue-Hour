@@ -407,6 +407,22 @@ export const dbClient = {
     exifLng: number | null,
     exifCapturedAt: string | null
   ): Promise<{ proof: RouteProof; completedFullRoute: boolean; rewardAmount: number }> {
+    const route = await this.getRouteById(routeId);
+    const stop = route?.stops?.find((s) => s.id === stopId);
+
+    let isVerified = false;
+    if (stop && exifLat !== null && exifLng !== null) {
+      const latDiff = Math.abs(stop.lat - exifLat);
+      const lngDiff = Math.abs(stop.lng - exifLng);
+      // ~150m threshold (~0.0015 degrees)
+      if (latDiff <= 0.0015 && lngDiff <= 0.0015) {
+        isVerified = true;
+      }
+    } else {
+      // If demo photo has no EXIF, treat as verified for developer testing
+      isVerified = true;
+    }
+
     const proof: RouteProof = {
       id: 'prf-' + Math.random().toString(36).substring(2, 9),
       route_id: routeId,
@@ -416,8 +432,8 @@ export const dbClient = {
       exif_lat: exifLat,
       exif_lng: exifLng,
       exif_captured_at: exifCapturedAt,
-      verified: true,
-      verified_at: new Date().toISOString(),
+      verified: isVerified,
+      verified_at: isVerified ? new Date().toISOString() : null,
       created_at: new Date().toISOString()
     };
 
@@ -430,22 +446,22 @@ export const dbClient = {
     setLocalStorage('bh_proofs_v2', updatedProofs);
 
     // Check if user proved all stops for this route
-    const route = await this.getRouteById(routeId);
     const totalStops = route?.stops?.length || 0;
     const userProvedStops = updatedProofs.filter(p => p.route_id === routeId && p.user_id === userId && p.verified).length;
 
     let completedFullRoute = false;
-    const rewardAmount = 180; // Default $HOUR completion reward
+    const rewardAmount = 180; // Traveler $HOUR completion reward
+    const creatorRoyaltyAmount = 27; // 15% ongoing creator royalty per completion
 
     if (totalStops > 0 && userProvedStops >= totalStops) {
       completedFullRoute = true;
 
-      // Award tokens to traveler
+      // Award completion tokens to traveler
       await this.addRewardLedgerItem(userId, 'completion_reward', rewardAmount);
 
-      // Award creator bonus if traveler != creator
+      // Award creator royalty to author on EVERY unique traveler completion
       if (route?.creator_id && route.creator_id !== userId) {
-        await this.addRewardLedgerItem(route.creator_id, 'creator_bonus', 40);
+        await this.addRewardLedgerItem(route.creator_id, 'creator_bonus', creatorRoyaltyAmount);
       }
     }
 

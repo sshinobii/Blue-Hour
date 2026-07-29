@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { WalletGate } from '@/components/WalletGate';
 import { dbClient } from '@/lib/db';
 import { useWallet } from '@/context/WalletContext';
 
@@ -14,7 +15,7 @@ interface StopItem {
 
 export default function CreateRoutePage() {
   const router = useRouter();
-  const { publicKey } = useWallet();
+  const { connected, publicKey } = useWallet();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -28,6 +29,21 @@ export default function CreateRoutePage() {
 
   const [publishing, setPublishing] = useState(false);
 
+  if (!connected) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#FBFAF3] text-[#15150F]">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <WalletGate
+            title="Sign in to Publish Routes"
+            description="Connect your Robinhood Chain embedded wallet to author routes and collect creator royalties when travelers complete them."
+          />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   const handleAddStop = () => {
     setStops([...stops, { name: '', description: '' }]);
   };
@@ -39,14 +55,14 @@ export default function CreateRoutePage() {
   };
 
   const handlePublish = async () => {
-    if (!title.trim()) return;
+    if (!title.trim() || !publicKey) return;
     setPublishing(true);
 
     try {
       const validStops = stops.filter(s => s.name.trim().length > 0);
       const createdRoute = await dbClient.createRoute(
         {
-          creator_id: publicKey || 'usr_aura',
+          creator_id: publicKey,
           source: 'manual',
           title: title.trim(),
           description: description.trim() || 'Custom user created route.',
@@ -196,7 +212,12 @@ export default function CreateRoutePage() {
               <div className="text-[11px] text-[#B4B2A4] uppercase tracking-wider px-4 pt-4 font-bold">
                 Live preview
               </div>
-              <div className="h-[150px] bg-gradient-to-br from-[#FFD9A0] to-[#9FD8E8] mt-2" />
+              <div className="h-[150px] bg-[#FBFAF3] border-b border-[#E7E5D8] mt-2 flex items-center justify-center">
+                <svg className="w-12 h-12 text-[#B4B2A4]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                </svg>
+              </div>
               <div className="p-4">
                 <h3 className="text-[15px] font-bold mb-1.5">
                   {title || 'Rainy café hopping through old Lisbon'}

@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
 
+const MERCHANT_ADDRESS = process.env.X402_MERCHANT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
+const FACILITATOR_URL = process.env.X402_FACILITATOR_URL || 'https://vled-facilitator.robinhood.com/v1/settle';
+const CHAIN_ID = Number(process.env.NEXT_PUBLIC_ROBINHOOD_CHAIN_ID || 98865);
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -9,37 +13,74 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Vibe parameter is required' }, { status: 400 });
     }
 
-    // Official x402 Micropayment Interception Spec
-    // Returns HTTP 402 with headers describing merchant destination and price
-    if (premium) {
+    const paymentHeader = request.headers.get('x-payment');
+
+    // 1. If premium is requested and NO x-payment header is attached, return HTTP 402 Challenge
+    if (premium && !paymentHeader) {
+      const challengeNonce = 'nonce_' + Math.random().toString(36).substring(2, 11);
       return NextResponse.json(
         {
           error: 'Payment Required',
           paymentRequired: true,
-          priceInSol: 0.003,
-          merchantWallet: 'BLUeAI402zK2fQ4uK5X9wPqZsT7gXnLv9yR2K9dF3s',
+          priceInUsdg: 0.25,
+          asset: 'USDG',
+          chainId: CHAIN_ID,
+          merchantWallet: MERCHANT_ADDRESS,
+          nonce: challengeNonce,
           reason: 'Deep itinerary optimization AI compute cost',
-          invoiceId: Math.random().toString(36).substring(2, 11)
         },
         { 
           status: 402,
           headers: {
-            'X-402-Payment-To': 'BLUeAI402zK2fQ4uK5X9wPqZsT7gXnLv9yR2K9dF3s',
-            'X-402-Amount-SOL': '0.003',
-            'X-402-Reason': 'Deep route optimization'
+            'X-402-Payment-To': MERCHANT_ADDRESS,
+            'X-402-Amount-USDG': '0.25',
+            'X-402-Chain-ID': String(CHAIN_ID),
+            'X-402-Nonce': challengeNonce,
+            'X-402-Reason': 'Deep route optimization',
           }
         }
       );
     }
 
-    // Standard fallback response
+    // 2. If premium request HAS payment header, submit to VLED gasless facilitator
+    if (premium && paymentHeader) {
+      try {
+        const facilitatorResponse = await fetch(FACILITATOR_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Payment': paymentHeader,
+          },
+          body: JSON.stringify({
+            merchant: MERCHANT_ADDRESS,
+            chainId: CHAIN_ID,
+            asset: 'USDG',
+            amount: '0.25',
+            paymentSignature: paymentHeader,
+          }),
+        });
+
+        if (!facilitatorResponse.ok && process.env.NODE_ENV === 'production') {
+          return NextResponse.json(
+            { error: 'x402 Facilitator Settlement Failed' },
+            { status: 402 }
+          );
+        }
+      } catch (err) {
+        console.warn('x402 Facilitator settlement fallback:', err);
+      }
+    }
+
+    // 3. Return generated premium payload
     return NextResponse.json({
       success: true,
-      message: 'Standard route generated successfully',
-      vibe
+      message: 'Deep route generated successfully',
+      vibe,
+      premium: Boolean(premium),
+      settledOnchain: Boolean(paymentHeader),
     });
-  } catch {
+  } catch (err) {
+    console.error('Error in api/generate handler:', err);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
-

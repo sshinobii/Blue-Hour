@@ -24,11 +24,12 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // eslint-disable-next-line react-hooks/rules-of-hooks
     privyAuth = usePrivy();
   } catch {
-    // Privy context not present or invalid app id
     privyAuth = null;
   }
 
-  // Fallback demo state when Privy is not configured or for instant guest demo
+  const isDev = process.env.NODE_ENV === 'development';
+
+  // Fallback demo state - ONLY active in development mode for offline demos
   const [mockConnected, setMockConnected] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
 
@@ -36,17 +37,17 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const connected = isPrivyAvailable
     ? privyAuth!.authenticated
-    : mockConnected;
+    : (isDev ? mockConnected : false);
 
   const publicKey = isPrivyAvailable && privyAuth!.user?.wallet?.address
     ? privyAuth!.user.wallet.address
-    : (connected ? '0x8f2c...c91a' : null);
+    : (isDev && mockConnected ? '0x8f2c...c91a' : null);
 
   const userEmail = isPrivyAvailable && privyAuth!.user?.email?.address
     ? privyAuth!.user.email.address
-    : (connected ? 'traveler@bluehour.io' : null);
+    : (isDev && mockConnected ? 'traveler@bluehour.io' : null);
 
-  const userId = publicKey || 'usr_aura';
+  const userId = publicKey || (isDev && mockConnected ? 'usr_aura' : null);
 
   const refreshProfile = useCallback(async () => {
     if (connected && userId) {
@@ -72,7 +73,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const connect = () => {
     if (isPrivyAvailable && privyAuth) {
       privyAuth.login();
-    } else {
+    } else if (isDev) {
       setMockConnected(true);
     }
   };
@@ -91,7 +92,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         connected,
         publicKey,
         userEmail,
-        hourBalance: profile?.hour_balance_cached || 4280,
+        hourBalance: profile?.hour_balance_cached || (isDev ? 4280 : 0),
         tier: profile?.tier || 'Nomad',
         profile,
         connect,

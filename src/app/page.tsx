@@ -1,14 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { dbClient, Route } from '@/lib/db';
 
 export default function HomePage() {
   const router = useRouter();
   const [promptInput, setPromptInput] = useState('');
+  const [liveRoutes, setLiveRoutes] = useState<Route[]>([]);
+
+  useEffect(() => {
+    const loadRoutes = async () => {
+      const r = await dbClient.getRoutes();
+      setLiveRoutes(r);
+    };
+    loadRoutes();
+  }, []);
 
   const handlePlanSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,51 +33,39 @@ export default function HomePage() {
     router.push(`/ai-agent?prompt=${encodeURIComponent(promptText)}`);
   };
 
+  const featuredRoute = liveRoutes[0] || {
+    id: 'ghost-romania',
+    title: 'Carpathian Ridge & Night Rail',
+    stops: [1, 2, 3],
+    creator_id: 'usr_aura',
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FBFAF3] text-[#15150F]">
       <Navbar />
 
       <main className="flex-1">
-        {/* HERO SECTION */}
-        <section className="screen border-b border-[#E7E5D8] py-14 md:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8 items-center">
-            <div>
-              <div className="tag-badge">AI travel agent · Robinhood Chain</div>
-
-              <h1 className="text-4xl md:text-6xl font-black leading-[1.15] tracking-tight mb-6 max-w-[780px]">
-                Find the route<br />
-                no tourist has<br />
-                <span className="bg-[#CCFF00] px-2 py-0.5 rounded-lg inline-block text-[#3A4A00]">found yet.</span>
-              </h1>
-
-              <p className="text-[#5B5B52] text-lg max-w-[540px] leading-relaxed mb-8">
-                Tell Wren your mood. Get an unusual trail. Go, prove you were there, collect onchain rewards for your journey.
-              </p>
-            </div>
-
-            {/* Wren Hero Mascot Slot — drop the generated image at
-                public/wren-mascot.png (see BLUEHOUR_AGENT_IMAGE_PROMPT.md) */}
-            <div className="hidden md:block relative w-full aspect-square rounded-[24px] bg-[#15150F] overflow-hidden wren-float">
-              <div className="absolute top-3 right-3 bg-[#CCFF00] text-[#3A4A00] text-[10px] font-black px-2 py-0.5 rounded-full z-10">
-                ONLINE
-              </div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/wren-mascot.png"
-                alt="Wren, the Bluehour AI travel agent"
-                className="absolute inset-0 w-full h-full object-cover"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                <div className="text-[56px] mb-1">🕊️</div>
-                <div className="font-extrabold text-[#CCFF00] text-[15px]">Wren</div>
-                <div className="text-[11.5px] text-[#B4B2A4]">Your trail bird</div>
-              </div>
-            </div>
+        {/* HERO SECTION - SECTION 7 BRIEF SPEC */}
+        <section className="screen border-b border-[#E7E5D8] py-12 md:py-16">
+          {/* Top Tag Pill */}
+          <div className="inline-block bg-[#CCFF00] text-[#3A4A00] font-black text-[11px] uppercase tracking-wider px-3.5 py-1 rounded-full mb-5">
+            AI travel agent · Robinhood Chain
           </div>
 
+          {/* H1 Headline with lime highlight rect */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.12] tracking-tight mb-6 max-w-[820px]">
+            Find the route no tourist has{' '}
+            <span className="bg-[#CCFF00] text-[#3A4A00] px-2.5 py-0.5 rounded-lg inline-block">
+              found yet.
+            </span>
+          </h1>
+
+          <p className="text-[#5B5B52] text-lg max-w-[560px] leading-relaxed mb-8">
+            Tell Wren your mood. Get an off-the-beaten-path route. Go, prove you were there with geotagged photos, and collect onchain rewards on Robinhood Chain.
+          </p>
+
           {/* PROMPT BAR */}
-          <form onSubmit={handlePlanSubmit} className="flex gap-2 bg-white border-[1.5px] border-[#15150F] rounded-[16px] p-2 max-w-[680px] mt-2">
+          <form onSubmit={handlePlanSubmit} className="flex gap-2 bg-white border-[1.5px] border-[#15150F] rounded-[16px] p-2 max-w-[680px]">
             <input
               type="text"
               value={promptInput}
@@ -84,7 +82,7 @@ export default function HomePage() {
           </form>
 
           {/* CHIPS */}
-          <div className="flex gap-2.5 mt-4 flex-wrap">
+          <div className="flex gap-2.5 mt-4 flex-wrap mb-10">
             <button
               onClick={() => handleChipClick('unmarked forest paths & mountain cabins')}
               className="chip-item"
@@ -105,11 +103,42 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* HERO SHOT */}
-          <div className="mt-12 rounded-[20px] overflow-hidden border border-[#E7E5D8] relative h-[300px] bg-gradient-to-br from-[#FFE9A8] via-[#CFEFC0] to-[#BFE3F0]">
-            <div className="absolute top-[36%] left-[44%] w-[14px] h-[14px] rounded-full bg-[#15150F] border-[3px] border-[#CCFF00]" />
-            <div className="absolute bottom-5 left-6 text-[13px] bg-white px-4 py-2.5 rounded-[12px] shadow-sm">
-              <b className="text-[#15150F]">Carpathian Ridge Trail & Ghost Rail</b> <span className="text-[#5B5B52]">· 8 days · 3/3 stops proved</span>
+          {/* FULL-WIDTH MAP PREVIEW PANEL */}
+          <div className="w-full h-[340px] bg-[#F4F3E8] border border-[#E7E5D8] rounded-[24px] relative overflow-hidden p-6 flex flex-col justify-between shadow-xs">
+            {/* Top-Left Live Counter Badge */}
+            <div className="bg-white border border-[#E7E5D8] rounded-full px-4 py-1.5 text-[12.5px] font-bold text-[#15150F] shadow-xs self-start flex items-center gap-2 z-10">
+              <span className="w-2 h-2 rounded-full bg-[#CCFF00] border border-[#15150F]" />
+              <span>{liveRoutes.length || 12} routes live now</span>
+            </div>
+
+            {/* SVG Dashed Polyline Network */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+              {/* Background routes (30% opacity) */}
+              <path d="M 50,220 Q 200,80 380,260 T 700,120 T 1100,280" fill="none" stroke="#15150F" strokeWidth="2" strokeDasharray="6 6" strokeOpacity="0.25" />
+              <path d="M 120,60 Q 300,300 550,140 T 900,200" fill="none" stroke="#15150F" strokeWidth="2" strokeDasharray="6 6" strokeOpacity="0.25" />
+              
+              {/* Featured Route Line (Opaque) */}
+              <path d="M 80,180 Q 240,40 460,200 T 820,100 T 1120,220" fill="none" stroke="#15150F" strokeWidth="2.5" strokeDasharray="8 6" />
+
+              {/* Stop Dot Markers */}
+              <circle cx="80" cy="180" r="5" fill="#15150F" stroke="#CCFF00" strokeWidth="2" />
+              <circle cx="240" cy="100" r="5" fill="#15150F" stroke="#CCFF00" strokeWidth="2" />
+              <circle cx="460" cy="200" r="9" fill="#CCFF00" stroke="#15150F" strokeWidth="3" /> {/* Highlighted stop */}
+              <circle cx="820" cy="100" r="5" fill="#15150F" stroke="#CCFF00" strokeWidth="2" />
+              <circle cx="1120" cy="220" r="5" fill="#15150F" stroke="#CCFF00" strokeWidth="2" />
+            </svg>
+
+            {/* Bottom-Left Floating Route Caption Card */}
+            <div className="bg-white border border-[#E7E5D8] rounded-[16px] p-4 max-w-sm shadow-md z-10">
+              <div className="text-[13.5px] font-bold text-[#15150F] mb-0.5">
+                {featuredRoute.title}
+              </div>
+              <div className="text-[12px] text-[#5B5B52] flex items-center justify-between">
+                <span>by @Aura_Wanderer</span>
+                <span className="font-semibold text-[#3A4A00] bg-[#CCFF00]/40 px-2 py-0.5 rounded-full">
+                  3/3 stops proved
+                </span>
+              </div>
             </div>
           </div>
         </section>
@@ -128,76 +157,6 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-
-        {/* AI AGENT SECTION */}
-        <section className="screen border-b border-[#E7E5D8] py-14 md:py-20">
-          <div className="grid grid-cols-1 md:grid-cols-[340px_1fr] gap-10">
-            <div>
-              <div className="tag-badge">AI agent · Wren</div>
-              <h2 className="text-3xl font-black mb-3 tracking-tight">One thread.<br />The whole trip.</h2>
-              <p className="text-[#5B5B52] text-[15px] leading-relaxed mb-6">
-                Two or three questions with Wren, then a full route — stops, budget, coordinates — saved straight to the atlas.
-              </p>
-              <div className="flex justify-between text-[13px] text-[#B4B2A4] py-2.5 border-t border-[#E7E5D8]">
-                <span>Avg. time to plotted route</span>
-                <b className="text-[#15150F]">38 sec</b>
-              </div>
-              <div className="flex justify-between text-[13px] text-[#B4B2A4] py-2.5 border-t border-[#E7E5D8]">
-                <span>Onchain Settlement</span>
-                <b className="text-[#3A4A00] font-bold">Robinhood Chain L2</b>
-              </div>
-            </div>
-
-            <div className="bg-white border border-[#E7E5D8] rounded-[20px] p-6 space-y-4">
-              <div className="flex justify-end">
-                <div className="max-w-[80%]">
-                  <div className="text-[11px] text-[#B4B2A4] mb-1.5 uppercase tracking-wider text-right font-bold">You</div>
-                  <div className="bg-[#15150F] text-[#CCFF00] p-4 rounded-[14px] text-[14px] font-medium leading-normal">
-                    Slow rainy train through mountain towns, local coffee, zero tourist traps.
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-start">
-                <div className="max-w-[85%]">
-                  <div className="text-[11px] text-[#B4B2A4] mb-1.5 uppercase tracking-wider font-bold">Wren</div>
-                  <div className="bg-[#F4F3E8] text-[#15150F] p-4 rounded-[14px] border border-[#E7E5D8] text-[14px] leading-relaxed space-y-3">
-                    <p>
-                      Mapped a Carpathian rail route — wooden sleeper coaches, early village stops, basement bakeries not on any map. Under €650.
-                    </p>
-                    <div className="bg-white border-[1.5px] border-[#CCFF00] rounded-[14px] p-3.5 flex justify-between items-center">
-                      <div>
-                        <b className="block text-[#15150F] text-[14px]">Night Trains Through Eastern Europe</b>
-                        <span className="text-[#B4B2A4] text-[12px]">8 days · saved to atlas</span>
-                      </div>
-                      <div className="text-[#5B5B52] font-semibold text-[13px]">Est. €650</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-end pt-2">
-                <Link
-                  href="/ai-agent"
-                  className="bg-[#15150F] text-[#CCFF00] px-5 py-2.5 rounded-full font-bold text-[13.5px]"
-                >
-                  Start your thread with Wren →
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* LORE SECTION: THE BLUE HOUR */}
-        <section className="screen border-b border-[#E7E5D8] py-14 md:py-20 bg-[#F4F3E8]/60">
-          <div className="max-w-[820px] mx-auto text-center">
-            <div className="tag-badge mx-auto mb-3">Brand Lore</div>
-            <h2 className="text-3xl md:text-4xl font-black mb-4 tracking-tight">The Blue Hour</h2>
-            <p className="text-[#5B5B52] text-[17px] leading-relaxed italic">
-              &quot;The blue hour is that quiet window right after sunset when the sky turns indigo and the trails go silent. It’s when the day’s journey turns into stories around small fires.&quot;
-            </p>
-          </div>
-        </section>
 
         {/* REWARD SYSTEM EXPLAINER SECTION */}
         <section className="screen border-b border-[#E7E5D8] py-14 md:py-16">
@@ -218,7 +177,7 @@ export default function HomePage() {
                     <span>🎒</span> As a Traveler
                   </div>
                   <p className="text-[13.5px] text-[#E7E5D8] leading-relaxed">
-                    Find a route (from Wren or another wanderer) → take it → prove each stop with a photo (checked for coordinates & time). Once every stop is proved, collect your onchain payout on Robinhood Chain.
+                    Find a route (from Wren or another wanderer) → take it → prove each stop with a photo (checked for coordinates & time). Once every stop is proved, collect your 180 $HOUR payout on Robinhood Chain.
                   </p>
                 </div>
 
@@ -227,16 +186,27 @@ export default function HomePage() {
                     <span>✍️</span> As a Creator
                   </div>
                   <p className="text-[13.5px] text-[#E7E5D8] leading-relaxed">
-                    Publish your own route with real stops. When another wanderer completes it, you receive a creator bonus on top of their reward for every unique completing wallet.
+                    Publish your own route with real stops. When another wanderer completes it, you receive an ongoing 15% creator royalty (27 $HOUR) for every unique completing wallet.
                   </p>
                 </div>
               </div>
 
               <div className="text-[12.5px] text-[#B4B2A4] pt-1 flex items-center gap-2">
                 <span className="text-[#CCFF00]">✓</span> 
-                <b>Why photo proof over points?</b> A route only pays out when real photos back it up — keeping creator bonuses honest and farm-free.
+                <b>Why photo proof over points?</b> A route only pays out when real photos back it up — keeping creator royalties honest and farm-free.
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* LORE SECTION: THE BLUE HOUR */}
+        <section className="screen border-b border-[#E7E5D8] py-14 md:py-20 bg-[#F4F3E8]/60">
+          <div className="max-w-[820px] mx-auto text-center">
+            <div className="tag-badge mx-auto mb-3">Brand Lore</div>
+            <h2 className="text-3xl md:text-4xl font-black mb-4 tracking-tight">The Blue Hour</h2>
+            <p className="text-[#5B5B52] text-[17px] leading-relaxed italic">
+              &quot;The blue hour is that quiet window right after sunset when the sky turns indigo and the trails go silent. It’s when the day’s journey turns into stories around small fires.&quot;
+            </p>
           </div>
         </section>
 
@@ -251,8 +221,12 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <Link href="/routes/ghost-romania" className="card-light block">
-              <div className="h-[160px] relative bg-gradient-to-br from-[#FFD9A0] to-[#F6A6B0]">
-                <div className="absolute top-3 left-3 bg-white text-[#3A4A00] text-[10.5px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full">
+              <div className="h-[160px] relative bg-[#FBFAF3] border-b border-[#E7E5D8] flex items-center justify-center p-4">
+                <svg className="w-12 h-12 text-[#15150F]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                </svg>
+                <div className="absolute top-3 left-3 bg-white text-[#3A4A00] border border-[#E7E5D8] text-[10.5px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full">
                   Hiking & Trail
                 </div>
               </div>
@@ -269,8 +243,12 @@ export default function HomePage() {
             </Link>
 
             <Link href="/routes/italy-coast" className="card-light block">
-              <div className="h-[160px] relative bg-gradient-to-br from-[#BFE9E0] to-[#8FCBE0]">
-                <div className="absolute top-3 left-3 bg-white text-[#3A4A00] text-[10.5px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full">
+              <div className="h-[160px] relative bg-[#FBFAF3] border-b border-[#E7E5D8] flex items-center justify-center p-4">
+                <svg className="w-12 h-12 text-[#15150F]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+                <div className="absolute top-3 left-3 bg-white text-[#3A4A00] border border-[#E7E5D8] text-[10.5px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full">
                   Coastal Path
                 </div>
               </div>
@@ -287,8 +265,11 @@ export default function HomePage() {
             </Link>
 
             <Link href="/routes/tokyo-cafe" className="card-light block">
-              <div className="h-[160px] relative bg-gradient-to-br from-[#FFE7A0] to-[#F2C6DE]">
-                <div className="absolute top-3 left-3 bg-white text-[#3A4A00] text-[10.5px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full">
+              <div className="h-[160px] relative bg-[#FBFAF3] border-b border-[#E7E5D8] flex items-center justify-center p-4">
+                <svg className="w-12 h-12 text-[#15150F]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+                <div className="absolute top-3 left-3 bg-white text-[#3A4A00] border border-[#E7E5D8] text-[10.5px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full">
                   Night city
                 </div>
               </div>
