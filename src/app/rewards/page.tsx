@@ -40,7 +40,7 @@ export default function RewardsPage() {
                 </div>
                 <h2 className="text-2xl font-black">1. Traveler Payouts</h2>
                 <p className="text-[#5B5B52] text-[14.5px] leading-relaxed">
-                  Find a route (from Wren or another wanderer). Take the journey, visit each stop physically, and upload a photo.
+                  Find a route — from Wren, or from a wanderer who walked it before you. Take it stop by stop, and leave proof: a photo where you actually stood. Finish it and the road pays you back, settled onchain in USDC.
                 </p>
 
                 <div className="space-y-2.5 pt-2">
@@ -49,7 +49,7 @@ export default function RewardsPage() {
                     <span>Geo-coordinates and timestamp are verified against stop locations.</span>
                   </div>
                   <div className="flex items-start gap-3 text-[13.5px] text-[#15150F]">
-                    <span className="text-[#3A4A00] bg-[#CCFF00] px-2 py-0.5 rounded-full font-bold text-[11px] shrink-0 mt-0.5">180 $HOUR</span>
+                    <span className="text-[#3A4A00] bg-[#CCFF00] px-2 py-0.5 rounded-full font-bold text-[11px] shrink-0 mt-0.5">USDC Payout</span>
                     <span>100% route completion triggers an instant settlement payout to your embedded wallet.</span>
                   </div>
                 </div>
@@ -70,13 +70,13 @@ export default function RewardsPage() {
                 </div>
                 <h2 className="text-2xl font-black">2. Ongoing Creator Royalties</h2>
                 <p className="text-[#5B5B52] text-[14.5px] leading-relaxed">
-                  Publish your own authentic routes with real stops. Instead of a one-time reward, your route becomes an ongoing income stream.
+                  Publish a route only you know. Every time someone else finds it and finishes it, you earn a share — for as long as people keep discovering what you found first.
                 </p>
 
                 <div className="space-y-2.5 pt-2">
                   <div className="flex items-start gap-3 text-[13.5px] text-[#15150F]">
-                    <span className="text-[#3A4A00] bg-[#CCFF00] px-2 py-0.5 rounded-full font-bold text-[11px] shrink-0 mt-0.5">15% Royalty</span>
-                    <span>Every time a new unique wallet completes your route, you earn 27 $HOUR automatically.</span>
+                    <span className="text-[#3A4A00] bg-[#CCFF00] px-2 py-0.5 rounded-full font-bold text-[11px] shrink-0 mt-0.5">Creator Share</span>
+                    <span>Every time a new unique wallet completes your route, you earn an automatic creator royalty.</span>
                   </div>
                   <div className="flex items-start gap-3 text-[13.5px] text-[#15150F]">
                     <span className="text-[#3A4A00] bg-[#CCFF00] px-2 py-0.5 rounded-full font-bold text-[11px] shrink-0 mt-0.5">Farm-Free</span>
@@ -96,10 +96,12 @@ export default function RewardsPage() {
         <section className="screen border-b border-[#E7E5D8] py-14 md:py-16">
           <div className="bg-[#15150F] text-white rounded-[24px] p-8 md:p-12 relative overflow-hidden">
             <div className="max-w-[760px] space-y-4">
-              <div className="text-[#CCFF00] font-mono text-[12px] uppercase tracking-wider">Proof Integrity</div>
-              <h2 className="text-3xl font-black">Why Photo Proof Over Points?</h2>
-              <p className="text-[#E7E5D8] text-[15px] leading-relaxed">
-                Points systems can be gamed from a desk. Bluehour requires EXIF metadata matching physical coordinates within ~150 meters. Real photos create authentic memories for travelers and guarantee that creator royalties are backed by actual human journeys.
+              <div className="inline-block bg-[#CCFF00] text-[#3A4A00] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full">
+                Real trails only
+              </div>
+              <h2 className="text-3xl font-black">Because the road doesn&apos;t lie.</h2>
+              <p className="text-[#E7E5D8] text-[15.5px] leading-relaxed">
+                Anyone can claim they went. Bluehour asks for the photo, where you were standing when you took it. That&apos;s what keeps every payout — and every creator&apos;s share — honest.
               </p>
             </div>
           </div>

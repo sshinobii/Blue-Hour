@@ -60,8 +60,8 @@ export default function HomePage() {
             </span>
           </h1>
 
-          <p className="text-[#5B5B52] text-lg max-w-[560px] leading-relaxed mb-8">
-            Tell Wren your mood. Get an off-the-beaten-path route. Go, prove you were there with geotagged photos, and collect onchain rewards on Robinhood Chain.
+          <p className="text-[#5B5B52] text-lg max-w-[620px] leading-relaxed mb-8">
+            Tell Wren how you feel — restless, foggy, hungry for silence. It hands back a real route nobody&apos;s written about yet. Go find it, prove you stood there, let the road pay you back.
           </p>
 
           {/* PROMPT BAR */}
@@ -143,12 +143,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* NOMAD MARQUEE STRIP */}
+        {/* NOMAD MARQUEE STRIP - ENGLISH ONLY */}
         <div className="w-full bg-[#CCFF00] border-b border-[#E7E5D8] overflow-hidden py-2.5">
           <div className="marquee-track">
             {[0, 1].map((rep) => (
               <div key={rep} className="flex items-center gap-8 pr-8 shrink-0">
-                {['NOMADS', 'WANDERERS', 'DREAMERS', 'FIRST DISCOVERERS', 'BLUKACHI', 'ON ROBINHOOD CHAIN'].map((word) => (
+                {['NOMADS', 'WANDERERS', 'DREAMERS', 'FIRST DISCOVERERS', 'ON ROBINHOOD CHAIN'].map((word) => (
                   <span key={word + rep} className="text-[#3A4A00] font-black text-[13px] tracking-wider uppercase whitespace-nowrap">
                     {word} <span className="text-[#3A4A00]/40 ml-8">·</span>
                   </span>
@@ -158,7 +158,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* REWARD SYSTEM EXPLAINER SECTION */}
+        {/* REWARD SYSTEM EXPLAINER SECTION - UPDATED COPY & USDC */}
         <section className="screen border-b border-[#E7E5D8] py-14 md:py-16">
           <div className="bg-[#15150F] text-white rounded-[24px] p-8 md:p-12 relative overflow-hidden shadow-xl">
             <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#CCFF00]/10 rounded-full blur-3xl pointer-events-none" />
@@ -172,27 +172,27 @@ export default function HomePage() {
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                <div className="bg-white/10 border border-white/15 rounded-[16px] p-5 backdrop-blur-xs space-y-2">
-                  <div className="flex items-center gap-2.5 text-[#CCFF00] font-extrabold text-[15px]">
+                <div className="bg-white/10 border border-white/15 rounded-[16px] p-6 backdrop-blur-xs space-y-3">
+                  <div className="flex items-center gap-2.5 text-[#CCFF00] font-extrabold text-[16px]">
                     <svg className="w-5 h-5 text-[#CCFF00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.818V8.05a1 1 0 00-1.447-.894L15 7m0 10V7m0 0L9 4" />
                     </svg>
                     <span>As a Traveler</span>
                   </div>
-                  <p className="text-[13.5px] text-[#E7E5D8] leading-relaxed">
-                    Find a route (from Wren or another wanderer) → take it → prove each stop with a photo (checked for coordinates & time). Once every stop is proved, collect your 180 $HOUR payout on Robinhood Chain.
+                  <p className="text-[14px] text-[#E7E5D8] leading-relaxed">
+                    Find a route — from Wren, or from a wanderer who walked it before you. Take it stop by stop, and leave proof: a photo where you actually stood. Finish it and the road pays you back, settled onchain in USDC.
                   </p>
                 </div>
 
-                <div className="bg-white/10 border border-white/15 rounded-[16px] p-5 backdrop-blur-xs space-y-2">
+                <div className="bg-white/10 border border-white/15 rounded-[16px] p-6 backdrop-blur-xs space-y-3">
                   <div className="flex items-center gap-2.5 text-[#CCFF00] font-extrabold text-[15px]">
                     <svg className="w-5 h-5 text-[#CCFF00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                     </svg>
                     <span>As a Creator</span>
                   </div>
-                  <p className="text-[13.5px] text-[#E7E5D8] leading-relaxed">
-                    Publish your own route with real stops. When another wanderer completes it, you receive an ongoing 15% creator royalty (27 $HOUR) for every unique completing wallet.
+                  <p className="text-[14px] text-[#E7E5D8] leading-relaxed">
+                    Publish a route only you know. Every time someone else finds it and finishes it, you earn a share — for as long as people keep discovering what you found first.
                   </p>
                 </div>
               </div>
@@ -216,80 +216,89 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* DISCOVER FEED SECTION */}
+        {/* ASYMMETRIC EDITORIAL DISCOVER FEED SECTION */}
         <section className="screen border-b border-[#E7E5D8] py-14 md:py-20">
-          <div className="flex justify-between items-baseline mb-7">
-            <h2 className="text-3xl font-black">Discover unusual trails</h2>
+          <div className="flex justify-between items-baseline mb-8">
+            <div>
+              <h2 className="text-3xl font-black mb-1">Discover unusual trails</h2>
+              <p className="text-[#5B5B52] text-[14px]">Where do you want to disappear to?</p>
+            </div>
             <Link href="/discover" className="text-[14px] font-bold text-[#15150F] hover:underline">
               View all routes →
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <Link href="/routes/ghost-romania" className="card-light block">
-              <div className="h-[160px] relative bg-[#FBFAF3] border-b border-[#E7E5D8] flex items-center justify-center p-4">
-                <svg className="w-12 h-12 text-[#15150F]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          {/* Asymmetric 2+1 Layout Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            {/* Card 1: Large Featured 2-Column Span */}
+            <Link href="/routes/ghost-romania" className="md:col-span-8 bg-white border border-[#E7E5D8] rounded-[24px] overflow-hidden group hover:border-[#15150F] transition-all flex flex-col justify-between p-6 md:p-8 relative">
+              <div className="h-[220px] bg-[#FBFAF3] border border-[#E7E5D8] rounded-[18px] flex items-center justify-center p-6 mb-6 relative overflow-hidden">
+                <svg className="w-16 h-16 text-[#15150F] group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
                 </svg>
-                <div className="absolute top-3 left-3 bg-white text-[#3A4A00] border border-[#E7E5D8] text-[10.5px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full">
-                  Hiking & Trail
+                <div className="absolute top-4 left-4 bg-[#CCFF00] text-[#3A4A00] text-[11px] font-black tracking-wider uppercase px-3 py-1 rounded-full">
+                  Featured Trail
                 </div>
               </div>
-              <div className="p-[18px]">
-                <h3 className="text-[16px] font-bold mb-2">Carpathian Ridge & Night Rail</h3>
-                <p className="text-[13px] text-[#5B5B52] leading-normal mb-4 min-h-[40px]">
+              <div>
+                <h3 className="text-2xl font-black mb-2 text-[#15150F]">Carpathian Ridge & Night Rail</h3>
+                <p className="text-[14.5px] text-[#5B5B52] leading-relaxed mb-6">
                   Unmarked forest paths, wooden sleeper coaches, foggy mountain cabins.
                 </p>
-                <div className="flex justify-between text-[12.5px] text-[#B4B2A4] border-t border-[#E7E5D8] pt-3">
-                  <span>8 days</span>
-                  <span className="text-[#5B5B52]">€650</span>
+                <div className="flex items-center justify-between text-[13px] text-[#B4B2A4] border-t border-[#E7E5D8] pt-4">
+                  <span>8 days · 3 stops</span>
+                  <span className="font-extrabold text-[#15150F] text-[15px]">€650 budget</span>
                 </div>
               </div>
             </Link>
 
-            <Link href="/routes/italy-coast" className="card-light block">
-              <div className="h-[160px] relative bg-[#FBFAF3] border-b border-[#E7E5D8] flex items-center justify-center p-4">
-                <svg className="w-12 h-12 text-[#15150F]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                </svg>
-                <div className="absolute top-3 left-3 bg-white text-[#3A4A00] border border-[#E7E5D8] text-[10.5px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full">
-                  Coastal Path
+            {/* Right Side Column (Staggered Cards) */}
+            <div className="md:col-span-4 space-y-6 flex flex-col justify-between">
+              {/* Card 2: Coastal */}
+              <Link href="/routes/italy-coast" className="bg-white border border-[#E7E5D8] rounded-[24px] p-6 hover:border-[#15150F] transition-all block flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-start mb-3">
+                    <span className="bg-[#FBFAF3] border border-[#E7E5D8] text-[#5B5B52] text-[10.5px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                      Coastal Path
+                    </span>
+                    <span className="text-[12px] font-bold text-[#3A4A00] bg-[#CCFF00]/40 px-2 py-0.5 rounded-full">
+                      USDC Payout
+                    </span>
+                  </div>
+                  <h3 className="text-[18px] font-black mb-2">Hidden Coastal Towns of Calabria</h3>
+                  <p className="text-[13px] text-[#5B5B52] leading-relaxed mb-4">
+                    Seaside cliff trails, zero tourists, €1.20 espresso on Calabria&apos;s shore.
+                  </p>
                 </div>
-              </div>
-              <div className="p-[18px]">
-                <h3 className="text-[16px] font-bold mb-2">Hidden Coastal Towns of Calabria</h3>
-                <p className="text-[13px] text-[#5B5B52] leading-normal mb-4 min-h-[40px]">
-                  Seaside cliff trails, zero tourists, €1.20 espresso on Calabria&apos;s shore.
-                </p>
                 <div className="flex justify-between text-[12.5px] text-[#B4B2A4] border-t border-[#E7E5D8] pt-3">
                   <span>7 days</span>
-                  <span className="text-[#5B5B52]">€850</span>
+                  <b className="text-[#15150F]">€850</b>
                 </div>
-              </div>
-            </Link>
+              </Link>
 
-            <Link href="/routes/tokyo-cafe" className="card-light block">
-              <div className="h-[160px] relative bg-[#FBFAF3] border-b border-[#E7E5D8] flex items-center justify-center p-4">
-                <svg className="w-12 h-12 text-[#15150F]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                </svg>
-                <div className="absolute top-3 left-3 bg-white text-[#3A4A00] border border-[#E7E5D8] text-[10.5px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-full">
-                  Night city
+              {/* Card 3: Tokyo Cafe */}
+              <Link href="/routes/tokyo-cafe" className="bg-white border border-[#E7E5D8] rounded-[24px] p-6 hover:border-[#15150F] transition-all block flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-start mb-3">
+                    <span className="bg-[#FBFAF3] border border-[#E7E5D8] text-[#5B5B52] text-[10.5px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                      Night City
+                    </span>
+                    <span className="text-[12px] font-bold text-[#3A4A00] bg-[#CCFF00]/40 px-2 py-0.5 rounded-full">
+                      USDC Payout
+                    </span>
+                  </div>
+                  <h3 className="text-[18px] font-black mb-2">Rainy Tokyo Café & Vinyl Alleys</h3>
+                  <p className="text-[13px] text-[#5B5B52] leading-relaxed mb-4">
+                    Basement vinyl bars, narrow alleys, steam over midnight ramen.
+                  </p>
                 </div>
-              </div>
-              <div className="p-[18px]">
-                <h3 className="text-[16px] font-bold mb-2">Rainy Tokyo Café & Vinyl Alleys</h3>
-                <p className="text-[13px] text-[#5B5B52] leading-normal mb-4 min-h-[40px]">
-                  Basement vinyl bars, narrow alleys, steam over midnight ramen.
-                </p>
                 <div className="flex justify-between text-[12.5px] text-[#B4B2A4] border-t border-[#E7E5D8] pt-3">
                   <span>10 days</span>
-                  <span className="text-[#5B5B52]">€1,200</span>
+                  <b className="text-[#15150F]">€1,200</b>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
           </div>
         </section>
       </main>

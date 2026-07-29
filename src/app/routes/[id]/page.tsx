@@ -192,7 +192,7 @@ export default function RouteDetailPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div className="bg-[#CCFF00] rounded-[14px] p-4 text-center">
-                <b className="block text-[24px] text-[#3A4A00] font-black">+180 HOUR</b>
+                <b className="block text-[22px] text-[#3A4A00] font-black">USDC Payout</b>
                 <span className="text-[11.5px] text-[#3A4A00] font-semibold">on full route completion</span>
               </div>
             </div>
