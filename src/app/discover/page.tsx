@@ -22,7 +22,7 @@ export default function DiscoverPage() {
     fetchRoutes();
   }, [activeCategory]);
 
-  const categories = ['All', 'Rail', 'Coast', 'Night city'];
+  const categories = ['All', 'Hiking', 'Rail', 'Coast', 'Night city'];
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FBFAF3] text-[#15150F]">
@@ -31,24 +31,36 @@ export default function DiscoverPage() {
       <main className="flex-1">
         <section className="screen py-10 md:py-16">
           {/* Header & Filter row */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-baseline gap-4 mb-8">
-            <h1 className="text-3xl md:text-4xl font-black tracking-tight">Discover</h1>
-            
-            <div className="flex gap-2.5 flex-wrap">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`text-[13px] px-4 py-1.5 rounded-full border transition-all font-medium ${
-                    activeCategory === cat
-                      ? 'bg-[#15150F] text-[#CCFF00] border-[#15150F] font-bold'
-                      : 'border-[#E7E5D8] text-[#5B5B52] bg-white hover:border-[#B4B2A4]'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-5 mb-3">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2">Discover</h1>
+              <p className="text-[#5B5B52] text-[14.5px] max-w-[480px] leading-relaxed">
+                Routes from Wren and from other wanderers — every trail here was walked, ridden, or wandered by
+                someone first. Think Tripadvisor, but for the roads nobody reviews.
+              </p>
             </div>
+            <Link
+              href="/routes/create"
+              className="bg-[#15150F] text-[#CCFF00] font-bold py-2.5 px-5 rounded-full text-[13.5px] hover:opacity-90 transition-all whitespace-nowrap"
+            >
+              + Publish your route
+            </Link>
+          </div>
+
+          <div className="flex gap-2.5 flex-wrap mb-8">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`text-[13px] px-4 py-1.5 rounded-full border transition-all font-medium ${
+                  activeCategory === cat
+                    ? 'bg-[#15150F] text-[#CCFF00] border-[#15150F] font-bold'
+                    : 'border-[#E7E5D8] text-[#5B5B52] bg-white hover:border-[#B4B2A4]'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
 
           {/* Cards Grid */}
@@ -82,9 +94,9 @@ export default function DiscoverPage() {
                       </p>
                       <div className="flex justify-between text-[12.5px] text-[#B4B2A4] border-t border-[#E7E5D8] pt-3">
                         <span>{route.days ? `${route.days} days` : 'Flexible'}</span>
-                        <b className="text-[#15150F]">
-                          {route.budget_amount ? `${route.budget_currency === 'EUR' ? '€' : '$'}${route.budget_amount}` : 'Free'}
-                        </b>
+                        <span className="text-[#B4B2A4] font-medium">
+                          {route.budget_amount ? `~${route.budget_currency === 'EUR' ? '€' : '$'}${route.budget_amount}` : 'Free'}
+                        </span>
                       </div>
                     </div>
                   </Link>

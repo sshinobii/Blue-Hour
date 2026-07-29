@@ -30,10 +30,10 @@ export default function HomePage() {
       <main className="flex-1">
         {/* HERO SECTION */}
         <section className="screen border-b border-[#E7E5D8] py-14 md:py-20">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="flex-1">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8 items-center">
+            <div>
               <div className="tag-badge">AI travel agent · Robinhood Chain</div>
-              
+
               <h1 className="text-4xl md:text-6xl font-black leading-[1.15] tracking-tight mb-6 max-w-[780px]">
                 Find the route<br />
                 no tourist has<br />
@@ -45,13 +45,23 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Wren Hero Mascot Slot */}
-            <div className="w-[180px] h-[180px] rounded-[24px] bg-[#15150F] border border-[#E7E5D8] p-5 flex flex-col items-center justify-center text-center shadow-lg relative">
-              <div className="text-[48px] mb-1">🕊️</div>
-              <div className="font-extrabold text-[#CCFF00] text-[14px]">Wren</div>
-              <div className="text-[11.5px] text-[#B4B2A4]">Your trail bird</div>
-              <div className="absolute -top-2 -right-2 bg-[#CCFF00] text-[#3A4A00] text-[10px] font-black px-2 py-0.5 rounded-full border border-[#15150F]">
+            {/* Wren Hero Mascot Slot — drop the generated image at
+                public/wren-mascot.png (see BLUEHOUR_AGENT_IMAGE_PROMPT.md) */}
+            <div className="hidden md:block relative w-full aspect-square rounded-[24px] bg-[#15150F] overflow-hidden wren-float">
+              <div className="absolute top-3 right-3 bg-[#CCFF00] text-[#3A4A00] text-[10px] font-black px-2 py-0.5 rounded-full z-10">
                 ONLINE
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/wren-mascot.png"
+                alt="Wren, the Bluehour AI travel agent"
+                className="absolute inset-0 w-full h-full object-cover"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                <div className="text-[56px] mb-1">🕊️</div>
+                <div className="font-extrabold text-[#CCFF00] text-[15px]">Wren</div>
+                <div className="text-[11.5px] text-[#B4B2A4]">Your trail bird</div>
               </div>
             </div>
           </div>
@@ -103,6 +113,21 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* NOMAD MARQUEE STRIP */}
+        <div className="w-full bg-[#CCFF00] border-b border-[#E7E5D8] overflow-hidden py-2.5">
+          <div className="marquee-track">
+            {[0, 1].map((rep) => (
+              <div key={rep} className="flex items-center gap-8 pr-8 shrink-0">
+                {['NOMADS', 'WANDERERS', 'DREAMERS', 'FIRST DISCOVERERS', 'BLUKACHI', 'ON ROBINHOOD CHAIN'].map((word) => (
+                  <span key={word + rep} className="text-[#3A4A00] font-black text-[13px] tracking-wider uppercase whitespace-nowrap">
+                    {word} <span className="text-[#3A4A00]/40 ml-8">·</span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* AI AGENT SECTION */}
         <section className="screen border-b border-[#E7E5D8] py-14 md:py-20">
@@ -171,6 +196,47 @@ export default function HomePage() {
             <p className="text-[#5B5B52] text-[17px] leading-relaxed italic">
               &quot;The blue hour is that quiet window right after sunset when the sky turns indigo and the trails go silent. It’s when the day’s journey turns into stories around small fires.&quot;
             </p>
+          </div>
+        </section>
+
+        {/* REWARD SYSTEM EXPLAINER SECTION */}
+        <section className="screen border-b border-[#E7E5D8] py-14 md:py-16">
+          <div className="bg-[#15150F] text-white rounded-[24px] p-8 md:p-12 relative overflow-hidden shadow-xl">
+            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#CCFF00]/10 rounded-full blur-3xl pointer-events-none" />
+            
+            <div className="max-w-[760px] space-y-6">
+              <div className="inline-block bg-[#CCFF00] text-[#3A4A00] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full">
+                Onchain Settlement · Robinhood Chain
+              </div>
+              <h2 className="text-3xl md:text-4xl font-black leading-tight text-white">
+                How Rewards Work
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                <div className="bg-white/10 border border-white/15 rounded-[16px] p-5 backdrop-blur-xs space-y-2">
+                  <div className="flex items-center gap-2 text-[#CCFF00] font-extrabold text-[15px]">
+                    <span>🎒</span> As a Traveler
+                  </div>
+                  <p className="text-[13.5px] text-[#E7E5D8] leading-relaxed">
+                    Find a route (from Wren or another wanderer) → take it → prove each stop with a photo (checked for coordinates & time). Once every stop is proved, collect your onchain payout on Robinhood Chain.
+                  </p>
+                </div>
+
+                <div className="bg-white/10 border border-white/15 rounded-[16px] p-5 backdrop-blur-xs space-y-2">
+                  <div className="flex items-center gap-2 text-[#CCFF00] font-extrabold text-[15px]">
+                    <span>✍️</span> As a Creator
+                  </div>
+                  <p className="text-[13.5px] text-[#E7E5D8] leading-relaxed">
+                    Publish your own route with real stops. When another wanderer completes it, you receive a creator bonus on top of their reward for every unique completing wallet.
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-[12.5px] text-[#B4B2A4] pt-1 flex items-center gap-2">
+                <span className="text-[#CCFF00]">✓</span> 
+                <b>Why photo proof over points?</b> A route only pays out when real photos back it up — keeping creator bonuses honest and farm-free.
+              </div>
+            </div>
           </div>
         </section>
 

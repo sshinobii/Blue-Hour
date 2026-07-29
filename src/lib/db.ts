@@ -78,6 +78,15 @@ export interface RewardLedgerItem {
   created_at: string;
 }
 
+export interface UserStory {
+  id: string;
+  user_id: string;
+  route_id?: string | null;
+  photo_url: string;
+  caption: string | null;
+  created_at: string;
+}
+
 // Supabase Client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -524,5 +533,65 @@ export const dbClient = {
     }
 
     return profilesMap[userId];
+  },
+
+  // User Stories
+  async getUserStories(userId?: string): Promise<UserStory[]> {
+    if (isSupabaseConfigured && supabase) {
+      let query = supabase.from('user_stories').select('*').order('created_at', { ascending: false });
+      if (userId) query = query.eq('user_id', userId);
+      const { data, error } = await query;
+      if (!error && data) return data as UserStory[];
+    }
+
+    const stories = getLocalStorage<UserStory[]>('bh_user_stories', [
+      {
+        id: 'stry-1',
+        user_id: 'usr_aura',
+        route_id: 'ghost-romania',
+        photo_url: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=800&auto=format&fit=crop',
+        caption: 'Misty morning espresso at 6:00 AM before taking the train through Transylvania.',
+        created_at: new Date().toISOString()
+      },
+      {
+        id: 'stry-2',
+        user_id: 'usr_aura',
+        route_id: 'italy-coast',
+        photo_url: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=800&auto=format&fit=crop',
+        caption: 'Watching Mount Etna smoke across the sea from Calabria coast.',
+        created_at: new Date().toISOString()
+      }
+    ]);
+
+    if (userId) {
+      return stories.filter(s => s.user_id === userId);
+    }
+    return stories;
+  },
+
+  async createUserStory(
+    userId: string,
+    photoUrl: string,
+    caption: string | null,
+    routeId?: string | null
+  ): Promise<UserStory> {
+    const story: UserStory = {
+      id: 'stry-' + Math.random().toString(36).substring(2, 9),
+      user_id: userId,
+      route_id: routeId || null,
+      photo_url: photoUrl,
+      caption: caption || null,
+      created_at: new Date().toISOString()
+    };
+
+    if (isSupabaseConfigured && supabase) {
+      await supabase.from('user_stories').insert(story);
+    }
+
+    const stories = getLocalStorage<UserStory[]>('bh_user_stories', []);
+    const updated = [story, ...stories];
+    setLocalStorage('bh_user_stories', updated);
+
+    return story;
   }
 };

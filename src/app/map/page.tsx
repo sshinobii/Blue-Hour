@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { dbClient, Route } from '@/lib/db';
+import { MapComponent } from '@/components/MapComponent';
 
 export default function MapExplorerPage() {
   const [routes, setRoutes] = useState<Route[]>([]);
@@ -101,38 +102,12 @@ export default function MapExplorerPage() {
             </div>
 
             {/* Map Canvas */}
-            <div className="relative bg-gradient-to-br from-[#EAF3D8] via-[#DDEFE3] to-[#D7E8EC] min-h-[400px]">
-              {/* Render Pins & SVG Path */}
-              {selectedRoute?.stops?.map((stop, idx) => {
-                // Approximate canvas positions for demo visual map pins
-                const positions = [
-                  { top: '38%', left: '30%' },
-                  { top: '58%', left: '52%' },
-                  { top: '44%', left: '74%' },
-                ];
-                const pos = positions[idx % positions.length];
-
-                return (
-                  <React.Fragment key={stop.id}>
-                    <div
-                      style={{ top: pos.top, left: pos.left }}
-                      className={`absolute w-4 h-4 rounded-full bg-[#15150F] border-[3px] border-[#CCFF00] transform -translate-x-1/2 -translate-y-1/2 z-10 transition-transform ${
-                        activeStopIndex === idx ? 'scale-125 ring-4 ring-[#CCFF00]/40' : ''
-                      }`}
-                    />
-                    <div
-                      style={{ top: `calc(${pos.top} - 28px)`, left: pos.left }}
-                      className="absolute bg-white px-2.5 py-1 rounded-[8px] text-[11.5px] font-extrabold shadow-sm transform -translate-x-1/2 z-10"
-                    >
-                      {stop.name}
-                    </div>
-                  </React.Fragment>
-                );
-              })}
-
-              <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path d="M 30 38 L 52 58 L 74 44" fill="none" stroke="#15150F" strokeWidth="0.4" strokeDasharray="1.5,1.5" />
-              </svg>
+            <div className="relative min-h-[400px]">
+              <MapComponent
+                route={selectedRoute}
+                activeStopIndex={activeStopIndex}
+                onSelectStop={setActiveStopIndex}
+              />
             </div>
           </div>
         </section>

@@ -18,8 +18,7 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { name: 'Discover', path: '/discover' },
-    { name: 'AI agent', path: '/ai-agent' },
-    { name: 'Create route', path: '/routes/create' },
+    { name: 'Wren', path: '/ai-agent' },
     { name: 'Map explorer', path: '/map' },
     { name: 'Profile', path: '/profile' },
   ];
