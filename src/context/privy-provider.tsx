@@ -3,7 +3,7 @@
 import React from 'react';
 import { PrivyProvider } from '@privy-io/react-auth';
 
-// Robinhood Chain EVM custom definition (Arbitrum L2 EVM based)
+// Robinhood Chain EVM custom definition
 const robinhoodChain = {
   id: 98865,
   name: 'Robinhood Chain',
@@ -25,9 +25,14 @@ const robinhoodChain = {
 
 const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID || '';
 
+const isValidPrivyAppId = (id: string) => {
+  if (!id || typeof id !== 'string') return false;
+  if (id.includes('your_privy_app_id') || id.length < 10) return false;
+  return true;
+};
+
 export const PrivyClientProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  if (!PRIVY_APP_ID) {
-    // If no Privy App ID is configured, render children with fallback state handled in WalletContext
+  if (!isValidPrivyAppId(PRIVY_APP_ID)) {
     return <>{children}</>;
   }
 
