@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const MERCHANT_ADDRESS = process.env.X402_MERCHANT_ADDRESS || '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
+const MERCHANT_ADDRESS = process.env.X402_MERCHANT_ADDRESS || '0x5b78709bF844d5aD0d46f40b2D7f32394F70C246';
 const FACILITATOR_URL = process.env.X402_FACILITATOR_URL || 'https://vled-facilitator.robinhood.com/v1/settle';
 const CHAIN_ID = Number(process.env.NEXT_PUBLIC_ROBINHOOD_CHAIN_ID || 98865);
 
