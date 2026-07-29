@@ -48,7 +48,7 @@ function WrenLoreContent() {
         </div>
 
         <div className="flex items-center justify-center">
-          <div className="relative w-full aspect-square rounded-[24px] bg-[#FBFAF3] border border-[#E7E5D8] flex items-center justify-center overflow-hidden p-6 shadow-sm">
+          <div className="relative w-full max-w-[320px] aspect-square flex items-center justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/wren-mascot.png"

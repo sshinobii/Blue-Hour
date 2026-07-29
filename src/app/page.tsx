@@ -164,15 +164,12 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             {/* Mascot Image Display */}
             <div className="md:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-[340px] aspect-square rounded-[28px] bg-[#FBFAF3] border-[2px] border-[#15150F] p-4 shadow-lg overflow-hidden group">
-                <div className="absolute top-3 right-3 bg-[#CCFF00] text-[#3A4A00] text-[10.5px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full shadow-xs">
-                  Official Companion
-                </div>
+              <div className="relative w-full max-w-[340px] aspect-square flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/wren-mascot.png"
                   alt="Wren, the Bluehour AI Falcon Companion"
-                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
                 />
               </div>
             </div>
@@ -223,8 +220,10 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Feature Card 1: x402 Micropayments */}
             <div className="bg-white border-[1.5px] border-[#15150F] rounded-[24px] p-8 space-y-4 shadow-sm hover:border-[#CCFF00] transition-all">
-              <div className="w-12 h-12 rounded-[14px] bg-[#CCFF00] text-[#3A4A00] flex items-center justify-center font-black text-[18px] shadow-xs">
-                ⚡
+              <div className="w-12 h-12 rounded-[14px] bg-[#CCFF00] text-[#3A4A00] flex items-center justify-center shadow-xs">
+                <svg className="w-6 h-6 text-[#3A4A00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                </svg>
               </div>
               <h3 className="text-2xl font-black text-[#15150F]">x402 Micropayments Protocol</h3>
               <p className="text-[#5B5B52] text-[14.5px] leading-relaxed">
@@ -237,8 +236,10 @@ export default function HomePage() {
 
             {/* Feature Card 2: Robinhood Chain */}
             <div className="bg-white border-[1.5px] border-[#15150F] rounded-[24px] p-8 space-y-4 shadow-sm hover:border-[#CCFF00] transition-all">
-              <div className="w-12 h-12 rounded-[14px] bg-[#15150F] text-[#CCFF00] flex items-center justify-center font-black text-[18px] shadow-xs">
-                🌐
+              <div className="w-12 h-12 rounded-[14px] bg-[#15150F] text-[#CCFF00] flex items-center justify-center shadow-xs">
+                <svg className="w-6 h-6 text-[#CCFF00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m-0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.086-1.04-8.435-2.797m0 0A8.959 8.959 0 013 12c0-.778.099-1.533.284-2.253" />
+                </svg>
               </div>
               <h3 className="text-2xl font-black text-[#15150F]">Robinhood Chain</h3>
               <p className="text-[#5B5B52] text-[14.5px] leading-relaxed">
