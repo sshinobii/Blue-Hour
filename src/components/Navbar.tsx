@@ -30,8 +30,8 @@ export const Navbar: React.FC = () => {
           
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 font-black text-[18px] text-[#15150F] no-underline">
-            <div className="w-[26px] h-[26px] rounded-[7px] bg-[#15150F] text-[#CCFF00] flex items-center justify-center font-black text-[14px]">
-              b
+            <div className="w-[30px] h-[30px] rounded-[8px] bg-[#15150F] border border-[#CCFF00] flex items-center justify-center overflow-hidden">
+              <img src="/wren-mascot.png" alt="Wren" className="w-full h-full object-cover" />
             </div>
             Bluehour
           </Link>

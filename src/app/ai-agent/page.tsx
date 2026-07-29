@@ -48,17 +48,13 @@ function WrenLoreContent() {
         </div>
 
         <div className="flex items-center justify-center">
-          <div className="relative w-full aspect-square rounded-[24px] bg-gradient-to-br from-[#F4F8E0] to-[#FBFAF3] border border-[#E7E5D8] flex items-center justify-center overflow-hidden">
+          <div className="relative w-full aspect-square rounded-[24px] bg-[#FBFAF3] border border-[#E7E5D8] flex items-center justify-center overflow-hidden p-6 shadow-sm">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/wren-mascot.png"
               alt="Wren, the Bluehour AI travel agent"
-              className="w-[78%] h-[78%] object-contain"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              className="w-full h-full object-contain"
             />
-            <div className="w-[120px] h-[120px] rounded-full bg-[#15150F] text-[#CCFF00] flex items-center justify-center font-black text-[40px] shadow-lg">
-              W
-            </div>
           </div>
         </div>
       </div>

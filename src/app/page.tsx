@@ -45,17 +45,18 @@ export default function HomePage() {
       <Navbar />
 
       <main className="flex-1">
-        {/* HERO SECTION - SECTION 7 BRIEF SPEC */}
+        {/* HERO SECTION */}
         <section className="screen border-b border-[#E7E5D8] py-12 md:py-16">
           {/* Top Tag Pill */}
-          <div className="inline-block bg-[#CCFF00] text-[#3A4A00] font-black text-[11px] uppercase tracking-wider px-3.5 py-1 rounded-full mb-5">
+          <div className="inline-flex items-center gap-2 bg-[#CCFF00] text-[#3A4A00] font-black text-[11px] uppercase tracking-wider px-3.5 py-1 rounded-full mb-5 shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-[#3A4A00] animate-pulse" />
             AI travel agent · Robinhood Chain
           </div>
 
           {/* H1 Headline with lime highlight rect */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.12] tracking-tight mb-6 max-w-[820px]">
             Find the route no tourist has{' '}
-            <span className="bg-[#CCFF00] text-[#3A4A00] px-2.5 py-0.5 rounded-lg inline-block">
+            <span className="bg-[#CCFF00] text-[#3A4A00] px-3 py-0.5 rounded-xl inline-block shadow-xs">
               found yet.
             </span>
           </h1>
@@ -64,8 +65,8 @@ export default function HomePage() {
             Tell Wren how you feel — restless, foggy, hungry for silence. It hands back a real route nobody&apos;s written about yet. Go find it, prove you stood there, let the road pay you back.
           </p>
 
-          {/* PROMPT BAR */}
-          <form onSubmit={handlePlanSubmit} className="flex gap-2 bg-white border-[1.5px] border-[#15150F] rounded-[16px] p-2 max-w-[680px]">
+          {/* PROMPT BAR WITH LIME HIGHLIGHT */}
+          <form onSubmit={handlePlanSubmit} className="flex gap-2 bg-white border-[2px] border-[#15150F] rounded-[18px] p-2 max-w-[680px] shadow-sm">
             <input
               type="text"
               value={promptInput}
@@ -75,7 +76,7 @@ export default function HomePage() {
             />
             <button
               type="submit"
-              className="bg-[#15150F] text-[#CCFF00] border-none rounded-[12px] px-6 py-2.5 font-bold text-[14px] cursor-pointer hover:opacity-90 transition-all flex items-center gap-1"
+              className="bg-[#15150F] text-[#CCFF00] border-none rounded-[12px] px-6 py-2.5 font-extrabold text-[14px] cursor-pointer hover:bg-[#CCFF00] hover:text-[#3A4A00] transition-all flex items-center gap-1 shadow-xs"
             >
               Plan it →
             </button>
@@ -85,19 +86,19 @@ export default function HomePage() {
           <div className="flex gap-2.5 mt-4 flex-wrap mb-10">
             <button
               onClick={() => handleChipClick('unmarked forest paths & mountain cabins')}
-              className="chip-item"
+              className="chip-item hover:border-[#CCFF00]"
             >
               unmarked forest paths & mountain cabins
             </button>
             <button
               onClick={() => handleChipClick('rainy cafés and trains across Japan')}
-              className="chip-item"
+              className="chip-item hover:border-[#CCFF00]"
             >
               rainy cafés and trains across Japan
             </button>
             <button
               onClick={() => handleChipClick('hidden beach towns, zero tourists')}
-              className="chip-item"
+              className="chip-item hover:border-[#CCFF00]"
             >
               hidden beach towns, zero tourists
             </button>
@@ -123,7 +124,7 @@ export default function HomePage() {
               {/* Stop Dot Markers */}
               <circle cx="80" cy="180" r="5" fill="#15150F" stroke="#CCFF00" strokeWidth="2" />
               <circle cx="240" cy="100" r="5" fill="#15150F" stroke="#CCFF00" strokeWidth="2" />
-              <circle cx="460" cy="200" r="9" fill="#CCFF00" stroke="#15150F" strokeWidth="3" /> {/* Highlighted stop */}
+              <circle cx="460" cy="200" r="9" fill="#CCFF00" stroke="#15150F" strokeWidth="3" />
               <circle cx="820" cy="100" r="5" fill="#15150F" stroke="#CCFF00" strokeWidth="2" />
               <circle cx="1120" cy="220" r="5" fill="#15150F" stroke="#CCFF00" strokeWidth="2" />
             </svg>
@@ -135,7 +136,7 @@ export default function HomePage() {
               </div>
               <div className="text-[12px] text-[#5B5B52] flex items-center justify-between">
                 <span>by @Aura_Wanderer</span>
-                <span className="font-semibold text-[#3A4A00] bg-[#CCFF00]/40 px-2 py-0.5 rounded-full">
+                <span className="font-bold text-[#3A4A00] bg-[#CCFF00] px-2.5 py-0.5 rounded-full text-[11px]">
                   3/3 stops proved
                 </span>
               </div>
@@ -143,8 +144,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* NOMAD MARQUEE STRIP - ENGLISH ONLY */}
-        <div className="w-full bg-[#CCFF00] border-b border-[#E7E5D8] overflow-hidden py-2.5">
+        {/* NOMAD MARQUEE STRIP */}
+        <div className="w-full bg-[#CCFF00] border-b border-[#E7E5D8] overflow-hidden py-3">
           <div className="marquee-track">
             {[0, 1].map((rep) => (
               <div key={rep} className="flex items-center gap-8 pr-8 shrink-0">
@@ -158,13 +159,105 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* REWARD SYSTEM EXPLAINER SECTION - UPDATED COPY & USDC */}
+        {/* MEET WREN — MASCOT & AGENT LORE SHOWCASE SECTION */}
+        <section className="screen border-b border-[#E7E5D8] py-14 md:py-20 bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            {/* Mascot Image Display */}
+            <div className="md:col-span-5 flex justify-center">
+              <div className="relative w-full max-w-[340px] aspect-square rounded-[28px] bg-[#FBFAF3] border-[2px] border-[#15150F] p-4 shadow-lg overflow-hidden group">
+                <div className="absolute top-3 right-3 bg-[#CCFF00] text-[#3A4A00] text-[10.5px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full shadow-xs">
+                  Official Companion
+                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/wren-mascot.png"
+                  alt="Wren, the Bluehour AI Falcon Companion"
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            </div>
+
+            {/* Lore & Agent Copy */}
+            <div className="md:col-span-7 space-y-5">
+              <div className="inline-block bg-[#CCFF00] text-[#3A4A00] text-[11px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full">
+                AI Companion Lore
+              </div>
+              <h2 className="text-3xl md:text-4xl font-black leading-tight text-[#15150F]">
+                Meet Wren. Your migratory AI guide.
+              </h2>
+              <p className="text-[#5B5B52] text-[16px] leading-relaxed">
+                Wren is a hooded falcon migratory companion who&apos;s flown over a hundred ridgelines and secret alleys. Tell Wren how you feel — foggy, restless, or hungry for quiet — and it plots an unmapped journey tailored to your mood.
+              </p>
+              <div className="pt-2 flex flex-wrap gap-3">
+                <Link
+                  href="/ai-agent"
+                  className="bg-[#15150F] text-[#CCFF00] font-extrabold px-6 py-3 rounded-full text-[14px] hover:bg-[#CCFF00] hover:text-[#3A4A00] transition-all inline-block shadow-xs"
+                >
+                  Discover Wren&apos;s story →
+                </Link>
+                <Link
+                  href="/profile"
+                  className="bg-[#CCFF00] text-[#3A4A00] font-extrabold px-6 py-3 rounded-full text-[14px] hover:bg-[#15150F] hover:text-[#CCFF00] transition-all inline-block shadow-xs"
+                >
+                  Chat with Wren
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* WEB3 AGENTIC INFRASTRUCTURE SECTION */}
+        <section className="screen border-b border-[#E7E5D8] py-14 md:py-20">
+          <div className="text-center max-w-[700px] mx-auto mb-12 space-y-3">
+            <div className="inline-block bg-[#CCFF00] text-[#3A4A00] text-[11px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full">
+              Built on Robinhood Chain
+            </div>
+            <h2 className="text-3xl md:text-4xl font-black text-[#15150F]">
+              The best chain for the agentic economy.
+            </h2>
+            <p className="text-[#5B5B52] text-[16px] leading-relaxed">
+              Powered by x402 gasless micropayments and Robinhood Chain infrastructure — built so AI agents and nomads can transact autonomously.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Feature Card 1: x402 Micropayments */}
+            <div className="bg-white border-[1.5px] border-[#15150F] rounded-[24px] p-8 space-y-4 shadow-sm hover:border-[#CCFF00] transition-all">
+              <div className="w-12 h-12 rounded-[14px] bg-[#CCFF00] text-[#3A4A00] flex items-center justify-center font-black text-[18px] shadow-xs">
+                ⚡
+              </div>
+              <h3 className="text-2xl font-black text-[#15150F]">x402 Micropayments Protocol</h3>
+              <p className="text-[#5B5B52] text-[14.5px] leading-relaxed">
+                Seamless agent-to-server micropayments via EIP-3009 gasless signatures in USDG. Wren pays for compute and unlocks premium routing in the background with zero wallet popups.
+              </p>
+              <div className="pt-2 flex items-center gap-2 text-[12px] font-bold text-[#3A4A00] bg-[#CCFF00]/40 px-3 py-1.5 rounded-lg w-fit">
+                <span>✓ HTTP 402 Standard · Gasless USDG</span>
+              </div>
+            </div>
+
+            {/* Feature Card 2: Robinhood Chain */}
+            <div className="bg-white border-[1.5px] border-[#15150F] rounded-[24px] p-8 space-y-4 shadow-sm hover:border-[#CCFF00] transition-all">
+              <div className="w-12 h-12 rounded-[14px] bg-[#15150F] text-[#CCFF00] flex items-center justify-center font-black text-[18px] shadow-xs">
+                🌐
+              </div>
+              <h3 className="text-2xl font-black text-[#15150F]">Robinhood Chain</h3>
+              <p className="text-[#5B5B52] text-[14.5px] leading-relaxed">
+                Engineered for instant EVM execution, sub-penny fees, and gas-sponsored relayers. The ideal blockchain ecosystem for autonomous AI agents and web3 travelers.
+              </p>
+              <div className="pt-2 flex items-center gap-2 text-[12px] font-bold text-[#15150F] bg-[#FBFAF3] border border-[#E7E5D8] px-3 py-1.5 rounded-lg w-fit">
+                <span>✓ Chain ID: 98865 · Instant EVM Finality</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* REWARD SYSTEM EXPLAINER SECTION */}
         <section className="screen border-b border-[#E7E5D8] py-14 md:py-16">
           <div className="bg-[#15150F] text-white rounded-[24px] p-8 md:p-12 relative overflow-hidden shadow-xl">
             <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#CCFF00]/10 rounded-full blur-3xl pointer-events-none" />
             
             <div className="max-w-[760px] space-y-6">
-              <div className="inline-block bg-[#CCFF00] text-[#3A4A00] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full">
+              <div className="inline-block bg-[#CCFF00] text-[#3A4A00] text-[11px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full">
                 Onchain Settlement · Robinhood Chain
               </div>
               <h2 className="text-3xl md:text-4xl font-black leading-tight text-white">
@@ -231,13 +324,13 @@ export default function HomePage() {
           {/* Asymmetric 2+1 Layout Grid */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Card 1: Large Featured 2-Column Span */}
-            <Link href="/routes/ghost-romania" className="md:col-span-8 bg-white border border-[#E7E5D8] rounded-[24px] overflow-hidden group hover:border-[#15150F] transition-all flex flex-col justify-between p-6 md:p-8 relative">
+            <Link href="/routes/ghost-romania" className="md:col-span-8 bg-white border border-[#E7E5D8] rounded-[24px] overflow-hidden group hover:border-[#CCFF00] transition-all flex flex-col justify-between p-6 md:p-8 relative shadow-xs">
               <div className="h-[220px] bg-[#FBFAF3] border border-[#E7E5D8] rounded-[18px] flex items-center justify-center p-6 mb-6 relative overflow-hidden">
                 <svg className="w-16 h-16 text-[#15150F] group-hover:scale-105 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
                 </svg>
-                <div className="absolute top-4 left-4 bg-[#CCFF00] text-[#3A4A00] text-[11px] font-black tracking-wider uppercase px-3 py-1 rounded-full">
+                <div className="absolute top-4 left-4 bg-[#CCFF00] text-[#3A4A00] text-[11px] font-black tracking-wider uppercase px-3 py-1 rounded-full shadow-xs">
                   Featured Trail
                 </div>
               </div>
@@ -253,16 +346,16 @@ export default function HomePage() {
               </div>
             </Link>
 
-            {/* Right Side Column (Staggered Cards) */}
+            {/* Right Side Column */}
             <div className="md:col-span-4 space-y-6 flex flex-col justify-between">
               {/* Card 2: Coastal */}
-              <Link href="/routes/italy-coast" className="bg-white border border-[#E7E5D8] rounded-[24px] p-6 hover:border-[#15150F] transition-all block flex-1 flex flex-col justify-between">
+              <Link href="/routes/italy-coast" className="bg-white border border-[#E7E5D8] rounded-[24px] p-6 hover:border-[#CCFF00] transition-all block flex-1 flex flex-col justify-between shadow-xs">
                 <div>
                   <div className="flex justify-between items-start mb-3">
                     <span className="bg-[#FBFAF3] border border-[#E7E5D8] text-[#5B5B52] text-[10.5px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
                       Coastal Path
                     </span>
-                    <span className="text-[12px] font-bold text-[#3A4A00] bg-[#CCFF00]/40 px-2 py-0.5 rounded-full">
+                    <span className="text-[12px] font-bold text-[#3A4A00] bg-[#CCFF00] px-2.5 py-0.5 rounded-full">
                       USDC Payout
                     </span>
                   </div>
@@ -278,13 +371,13 @@ export default function HomePage() {
               </Link>
 
               {/* Card 3: Tokyo Cafe */}
-              <Link href="/routes/tokyo-cafe" className="bg-white border border-[#E7E5D8] rounded-[24px] p-6 hover:border-[#15150F] transition-all block flex-1 flex flex-col justify-between">
+              <Link href="/routes/tokyo-cafe" className="bg-white border border-[#E7E5D8] rounded-[24px] p-6 hover:border-[#CCFF00] transition-all block flex-1 flex flex-col justify-between shadow-xs">
                 <div>
                   <div className="flex justify-between items-start mb-3">
                     <span className="bg-[#FBFAF3] border border-[#E7E5D8] text-[#5B5B52] text-[10.5px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
                       Night City
                     </span>
-                    <span className="text-[12px] font-bold text-[#3A4A00] bg-[#CCFF00]/40 px-2 py-0.5 rounded-full">
+                    <span className="text-[12px] font-bold text-[#3A4A00] bg-[#CCFF00] px-2.5 py-0.5 rounded-full">
                       USDC Payout
                     </span>
                   </div>
