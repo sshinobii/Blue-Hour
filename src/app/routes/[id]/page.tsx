@@ -77,7 +77,7 @@ export default function RouteDetailPage({ params }: { params: Promise<{ id: stri
       setProofs(updatedProofs);
 
       if (result.completedFullRoute) {
-        setRewardNotice(`🎉 Route Completed! You earned +${result.rewardAmount} $HOUR reward!`);
+        setRewardNotice(`Route Completed! You earned +${result.rewardAmount} $HOUR reward!`);
       }
     } catch (err) {
       console.error(err);
@@ -114,9 +114,9 @@ export default function RouteDetailPage({ params }: { params: Promise<{ id: stri
           </p>
 
           {rewardNotice && (
-            <div className="mb-6 p-4 rounded-[14px] bg-[#CCFF00] text-[#3A4A00] font-black text-[15px] flex justify-between items-center">
+            <div className="bg-[#CCFF00] text-[#3A4A00] rounded-[16px] p-4 font-bold text-[14px] mb-6 flex justify-between items-center">
               <span>{rewardNotice}</span>
-              <button onClick={() => setRewardNotice(null)} className="text-[13px] underline">Dismiss</button>
+              <button onClick={() => setRewardNotice(null)} className="text-[12px] underline">Dismiss</button>
             </div>
           )}
 
@@ -160,7 +160,7 @@ export default function RouteDetailPage({ params }: { params: Promise<{ id: stri
                           </span>
                         ) : (
                           <label className="border-[1.5px] border-[#15150F] text-[#15150F] font-bold text-[12.5px] px-3.5 py-1.5 rounded-full cursor-pointer hover:bg-[#15150F] hover:text-[#CCFF00] transition-colors inline-block">
-                            {uploadingStopId === stop.id ? 'Analyzing...' : '📷 Upload proof'}
+                            {uploadingStopId === stop.id ? 'Analyzing...' : 'Upload proof'}
                             <input
                               type="file"
                               accept="image/*"

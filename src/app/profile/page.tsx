@@ -225,7 +225,7 @@ function ProfileContent() {
             <div className="bg-white border border-[#E7E5D8] rounded-[20px] p-6 flex flex-col justify-between">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full bg-[#15150F] text-[#CCFF00] flex items-center justify-center text-[16px]">🕊️</div>
+                  <div className="w-9 h-9 rounded-full bg-[#15150F] text-[#CCFF00] flex items-center justify-center text-[13px] font-black">W</div>
                   <div>
                     <div className="font-extrabold text-[15px]">Wren</div>
                     <div className="text-[11px] text-[#B4B2A4]">{dailyMsgCount} / {DAILY_MESSAGE_LIMIT} messages today</div>

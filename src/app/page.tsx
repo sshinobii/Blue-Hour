@@ -173,8 +173,11 @@ export default function HomePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                 <div className="bg-white/10 border border-white/15 rounded-[16px] p-5 backdrop-blur-xs space-y-2">
-                  <div className="flex items-center gap-2 text-[#CCFF00] font-extrabold text-[15px]">
-                    <span>🎒</span> As a Traveler
+                  <div className="flex items-center gap-2.5 text-[#CCFF00] font-extrabold text-[15px]">
+                    <svg className="w-5 h-5 text-[#CCFF00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.818V8.05a1 1 0 00-1.447-.894L15 7m0 10V7m0 0L9 4" />
+                    </svg>
+                    <span>As a Traveler</span>
                   </div>
                   <p className="text-[13.5px] text-[#E7E5D8] leading-relaxed">
                     Find a route (from Wren or another wanderer) → take it → prove each stop with a photo (checked for coordinates & time). Once every stop is proved, collect your 180 $HOUR payout on Robinhood Chain.
@@ -182,8 +185,11 @@ export default function HomePage() {
                 </div>
 
                 <div className="bg-white/10 border border-white/15 rounded-[16px] p-5 backdrop-blur-xs space-y-2">
-                  <div className="flex items-center gap-2 text-[#CCFF00] font-extrabold text-[15px]">
-                    <span>✍️</span> As a Creator
+                  <div className="flex items-center gap-2.5 text-[#CCFF00] font-extrabold text-[15px]">
+                    <svg className="w-5 h-5 text-[#CCFF00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                    </svg>
+                    <span>As a Creator</span>
                   </div>
                   <p className="text-[13.5px] text-[#E7E5D8] leading-relaxed">
                     Publish your own route with real stops. When another wanderer completes it, you receive an ongoing 15% creator royalty (27 $HOUR) for every unique completing wallet.

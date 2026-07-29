@@ -56,7 +56,9 @@ function WrenLoreContent() {
               className="w-[78%] h-[78%] object-contain"
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
-            <span className="absolute text-[64px] pointer-events-none opacity-90">🕊️</span>
+            <div className="w-[120px] h-[120px] rounded-full bg-[#15150F] text-[#CCFF00] flex items-center justify-center font-black text-[40px] shadow-lg">
+              W
+            </div>
           </div>
         </div>
       </div>
@@ -96,6 +98,17 @@ function WrenLoreContent() {
           <div className="text-[22px] font-black">30 / day, signed in</div>
         </div>
         <div>
+          {/* Wren Companion Mascot Header */}
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 rounded-full bg-[#15150F] text-[#CCFF00] flex items-center justify-center font-black text-[18px] relative shadow-md">
+              W
+              <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#CCFF00] rounded-full border border-[#15150F]" />
+            </div>
+            <div>
+              <div className="font-extrabold text-[17px] text-[#15150F]">Wren</div>
+              <div className="text-[12px] text-[#5B5B52]">Your dreamy travel companion</div>
+            </div>
+          </div>
           <div className="text-[12px] text-[#B4B2A4] font-bold uppercase tracking-wider mb-1">Settlement</div>
           <div className="text-[22px] font-black text-[#3A4A00]">Gas-sponsored onchain</div>
         </div>
