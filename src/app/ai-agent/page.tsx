@@ -37,7 +37,7 @@ function WrenLoreContent() {
           </h1>
           <p className="text-[#5B5B52] text-[16px] leading-relaxed max-w-[540px] mb-7">
             A small migratory companion who&apos;s seen a hundred ridgelines and still gets excited about the next one.
-            Tell Wren a mood — foggy, hungry, restless, slow — and it plots a route with real stops, not a brochure.
+            Tell Wren a mood - foggy, hungry, restless, slow - and it plots a route with real stops, not a brochure.
           </p>
           <button
             onClick={goToChat}
@@ -71,14 +71,14 @@ function WrenLoreContent() {
         <div className="bg-white border border-[#E7E5D8] rounded-[18px] p-6 border-t-[3px] border-t-[#CCFF00]">
           <h3 className="text-[16px] font-bold mb-2">Plots the whole thing</h3>
           <p className="text-[13.5px] text-[#5B5B52] leading-relaxed">
-            One thread, a full route back — stops, coordinates, rough days — saved straight to your atlas, ready to
+            One thread, a full route back - stops, coordinates, rough days - saved straight to your atlas, ready to
             publish or take yourself.
           </p>
         </div>
         <div className="bg-white border border-[#E7E5D8] rounded-[18px] p-6 border-t-[3px] border-t-[#CCFF00]">
           <h3 className="text-[16px] font-bold mb-2">Lives in your profile</h3>
           <p className="text-[13.5px] text-[#5B5B52] leading-relaxed">
-            Sign in once, chat any time from your profile — no separate chat page to hunt for, no logging in twice.
+            Sign in once, chat any time from your profile - no separate chat page to hunt for, no logging in twice.
           </p>
         </div>
       </div>

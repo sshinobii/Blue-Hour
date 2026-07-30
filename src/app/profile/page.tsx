@@ -45,7 +45,7 @@ function ProfileContent() {
     {
       id: 'msg-init',
       sender: 'agent',
-      text: 'Hey — Wren here. Tell me a mood, a budget, or a trail vibe and I\'ll plot a route straight to your atlas.',
+      text: 'Hey - Wren here. Tell me a mood, a budget, or a trail vibe and I\'ll plot a route straight to your atlas.',
     },
   ]);
 
@@ -109,7 +109,7 @@ function ProfileContent() {
         setMessages((prev) => [...prev, {
           id: 'msg-res-' + Date.now(),
           sender: 'agent',
-          text: "That's not my trail — I only talk travel. Where do you want to go?",
+          text: "That's not my trail - I only talk travel. Where do you want to go?",
         }]);
         return;
       }
@@ -269,7 +269,7 @@ function ProfileContent() {
                   </div>
 
                   {dailyMsgCount >= DAILY_MESSAGE_LIMIT ? (
-                    <div className="text-[12.5px] text-[#5B5B52] text-center py-2">Back tomorrow — Wren&apos;s had its 30 chats for today.</div>
+                    <div className="text-[12.5px] text-[#5B5B52] text-center py-2">Back tomorrow - Wren&apos;s had its 30 chats for today.</div>
                   ) : (
                     <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(inputText); }} className="flex gap-2 bg-[#FDFCF6] border border-[#E7E5D8] rounded-[12px] p-2">
                       <input
@@ -287,7 +287,7 @@ function ProfileContent() {
                 </>
               ) : (
                 <p className="text-[13.5px] text-[#5B5B52] leading-relaxed">
-                  Wren is one click away — open the chat to plot a new trail without leaving your profile.
+                  Wren is one click away - open the chat to plot a new trail without leaving your profile.
                 </p>
               )}
             </div>
@@ -298,7 +298,7 @@ function ProfileContent() {
             <div className="flex justify-between items-center mb-4">
               <div>
                 <h2 className="text-xl font-black text-[#15150F]">My Travel Stories</h2>
-                <p className="text-[13px] text-[#5B5B52]">Moments captured on the trail — photos & stories from your journeys.</p>
+                <p className="text-[13px] text-[#5B5B52]">Moments captured on the trail - photos & stories from your journeys.</p>
               </div>
               <button
                 onClick={() => setStoryModalOpen(true)}

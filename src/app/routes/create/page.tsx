@@ -23,7 +23,7 @@ export default function CreateRoutePage() {
   const [budget, setBudget] = useState('450');
   const [days, setDays] = useState('6');
   const [stops, setStops] = useState<StopItem[]>([
-    { name: 'Alfama — tiled alleys, fado bars', description: 'Historic Lisbon district' },
+    { name: 'Alfama - tiled alleys, fado bars', description: 'Historic Lisbon district' },
     { name: 'Miradouro Overlook', description: 'Sunset sea views' }
   ]);
 
@@ -102,7 +102,7 @@ export default function CreateRoutePage() {
         <section className="screen py-10 md:py-16">
           <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2">Create a route</h1>
           <p className="text-[#5B5B52] text-[15px] max-w-[560px] leading-relaxed mb-8">
-            Publish the route only you know about. Real stops, a real budget — the next wanderer follows exactly what you lived.
+            Publish the route only you know about. Real stops, a real budget - the next wanderer follows exactly what you lived.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-[1fr_340px] gap-8">

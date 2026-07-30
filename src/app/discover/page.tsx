@@ -35,7 +35,7 @@ export default function DiscoverPage() {
             <div>
               <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2">Discover</h1>
               <p className="text-[#5B5B52] text-[15px] max-w-[560px] leading-relaxed">
-                Every trail here started as someone&apos;s mood — a rainy afternoon, a name they couldn&apos;t stop thinking about, a road with no signs. Wander in.
+                Every trail here started as someone&apos;s mood - a rainy afternoon, a name they couldn&apos;t stop thinking about, a road with no signs. Wander in.
               </p>
             </div>
             <Link

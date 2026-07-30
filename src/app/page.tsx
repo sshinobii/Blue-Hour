@@ -62,7 +62,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-[#5B5B52] text-lg max-w-[620px] leading-relaxed mb-8">
-            Tell Wren how you feel — restless, foggy, hungry for silence. It hands back a real route nobody&apos;s written about yet. Go find it, prove you stood there, let the road pay you back.
+            Tell Wren how you feel - restless, foggy, hungry for silence. It hands back a real route nobody&apos;s written about yet. Go find it, prove you stood there, let the road pay you back.
           </p>
 
           {/* PROMPT BAR WITH LIME HIGHLIGHT */}
@@ -159,7 +159,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* MEET WREN — MASCOT & AGENT LORE SHOWCASE SECTION */}
+        {/* MEET WREN - MASCOT & AGENT LORE SHOWCASE SECTION */}
         <section className="screen border-b border-[#E7E5D8] py-14 md:py-20 bg-white">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             {/* Mascot Image Display */}
@@ -183,7 +183,7 @@ export default function HomePage() {
                 Meet Wren. Your migratory AI guide.
               </h2>
               <p className="text-[#5B5B52] text-[16px] leading-relaxed">
-                Wren is a hooded falcon migratory companion who&apos;s flown over a hundred ridgelines and secret alleys. Tell Wren how you feel — foggy, restless, or hungry for quiet — and it plots an unmapped journey tailored to your mood.
+                Wren is a hooded falcon migratory companion who&apos;s flown over a hundred ridgelines and secret alleys. Tell Wren how you feel - foggy, restless, or hungry for quiet - and it plots an unmapped journey tailored to your mood.
               </p>
               <div className="pt-2 flex flex-wrap gap-3">
                 <Link
@@ -213,7 +213,7 @@ export default function HomePage() {
               The best chain for the agentic economy.
             </h2>
             <p className="text-[#5B5B52] text-[16px] leading-relaxed">
-              Powered by x402 gasless micropayments and Robinhood Chain infrastructure — built so AI agents and nomads can transact autonomously.
+              Powered by x402 gasless micropayments and Robinhood Chain infrastructure - built so AI agents and nomads can transact autonomously.
             </p>
           </div>
 
@@ -274,7 +274,7 @@ export default function HomePage() {
                     <span>As a Traveler</span>
                   </div>
                   <p className="text-[14px] text-[#E7E5D8] leading-relaxed">
-                    Find a route — from Wren, or from a wanderer who walked it before you. Take it stop by stop, and leave proof: a photo where you actually stood. Finish it and the road pays you back, settled onchain in USDC.
+                    Find a route - from Wren, or from a wanderer who walked it before you. Take it stop by stop, and leave proof: a photo where you actually stood. Finish it and the road pays you back, settled onchain in USDC.
                   </p>
                 </div>
 
@@ -286,14 +286,14 @@ export default function HomePage() {
                     <span>As a Creator</span>
                   </div>
                   <p className="text-[14px] text-[#E7E5D8] leading-relaxed">
-                    Publish a route only you know. Every time someone else finds it and finishes it, you earn a share — for as long as people keep discovering what you found first.
+                    Publish a route only you know. Every time someone else finds it and finishes it, you earn a share - for as long as people keep discovering what you found first.
                   </p>
                 </div>
               </div>
 
               <div className="text-[12.5px] text-[#B4B2A4] pt-1 flex items-center gap-2">
                 <span className="text-[#CCFF00]">✓</span> 
-                <b>Why photo proof over points?</b> A route only pays out when real photos back it up — keeping creator royalties honest and farm-free.
+                <b>Why photo proof over points?</b> A route only pays out when real photos back it up - keeping creator royalties honest and farm-free.
               </div>
             </div>
           </div>

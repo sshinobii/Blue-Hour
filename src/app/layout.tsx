@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bluehour — AI Travel Discovery on Robinhood Chain",
+  title: "Bluehour - AI Travel Discovery on Robinhood Chain",
   description:
     "Where do you want to disappear to? The AI travel companion for web3 nomads. Share your mystery routes. Powered by Robinhood Chain.",
   manifest: "/manifest.json",

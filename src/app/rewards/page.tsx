@@ -40,7 +40,7 @@ export default function RewardsPage() {
                 </div>
                 <h2 className="text-2xl font-black">1. Traveler Payouts</h2>
                 <p className="text-[#5B5B52] text-[14.5px] leading-relaxed">
-                  Find a route — from Wren, or from a wanderer who walked it before you. Take it stop by stop, and leave proof: a photo where you actually stood. Finish it and the road pays you back, settled onchain in USDC.
+                  Find a route - from Wren, or from a wanderer who walked it before you. Take it stop by stop, and leave proof: a photo where you actually stood. Finish it and the road pays you back, settled onchain in USDC.
                 </p>
 
                 <div className="space-y-2.5 pt-2">
@@ -70,7 +70,7 @@ export default function RewardsPage() {
                 </div>
                 <h2 className="text-2xl font-black">2. Ongoing Creator Royalties</h2>
                 <p className="text-[#5B5B52] text-[14.5px] leading-relaxed">
-                  Publish a route only you know. Every time someone else finds it and finishes it, you earn a share — for as long as people keep discovering what you found first.
+                  Publish a route only you know. Every time someone else finds it and finishes it, you earn a share - for as long as people keep discovering what you found first.
                 </p>
 
                 <div className="space-y-2.5 pt-2">
@@ -101,7 +101,7 @@ export default function RewardsPage() {
               </div>
               <h2 className="text-3xl font-black">Because the road doesn&apos;t lie.</h2>
               <p className="text-[#E7E5D8] text-[15.5px] leading-relaxed">
-                Anyone can claim they went. Bluehour asks for the photo, where you were standing when you took it. That&apos;s what keeps every payout — and every creator&apos;s share — honest.
+                Anyone can claim they went. Bluehour asks for the photo, where you were standing when you took it. That&apos;s what keeps every payout - and every creator&apos;s share - honest.
               </p>
             </div>
           </div>
