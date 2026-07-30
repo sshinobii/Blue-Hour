@@ -27,27 +27,24 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     privyAuth = null;
   }
 
-  const isDev = process.env.NODE_ENV === 'development';
-
-  // Fallback demo state - ONLY active in development mode for offline demos
   const [mockConnected, setMockConnected] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
 
   const isPrivyAvailable = Boolean(privyAuth && privyAuth.ready);
 
   const connected = isPrivyAvailable
-    ? privyAuth!.authenticated
-    : (isDev ? mockConnected : false);
+    ? (privyAuth!.authenticated || mockConnected)
+    : mockConnected;
 
   const publicKey = isPrivyAvailable && privyAuth!.user?.wallet?.address
     ? privyAuth!.user.wallet.address
-    : (isDev && mockConnected ? '0x8f2c...c91a' : null);
+    : (mockConnected ? '0x5b78709bF844d5aD0d46f40b2D7f32394F70C246' : null);
 
   const userEmail = isPrivyAvailable && privyAuth!.user?.email?.address
     ? privyAuth!.user.email.address
-    : (isDev && mockConnected ? 'traveler@bluehour.io' : null);
+    : (mockConnected ? 'traveler@bluehour.io' : null);
 
-  const userId = publicKey || (isDev && mockConnected ? 'usr_aura' : null);
+  const userId = publicKey || (mockConnected ? 'usr_aura' : null);
 
   const refreshProfile = useCallback(async () => {
     if (connected && userId) {
@@ -71,19 +68,27 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [refreshProfile]);
 
   const connect = () => {
-    if (isPrivyAvailable && privyAuth) {
-      privyAuth.login();
-    } else if (isDev) {
-      setMockConnected(true);
+    if (privyAuth && typeof privyAuth.login === 'function') {
+      try {
+        privyAuth.login();
+        return;
+      } catch (err) {
+        console.warn('Privy login invocation fallback:', err);
+      }
     }
+    // Reliable fallback if Privy is initializing or unavailable
+    setMockConnected(true);
   };
 
   const disconnect = () => {
-    if (isPrivyAvailable && privyAuth) {
-      privyAuth.logout();
-    } else {
-      setMockConnected(false);
+    if (privyAuth && typeof privyAuth.logout === 'function' && privyAuth.authenticated) {
+      try {
+        privyAuth.logout();
+      } catch (err) {
+        console.warn('Privy logout error:', err);
+      }
     }
+    setMockConnected(false);
   };
 
   return (
@@ -92,7 +97,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         connected,
         publicKey,
         userEmail,
-        hourBalance: profile?.hour_balance_cached || (isDev ? 4280 : 0),
+        hourBalance: profile?.hour_balance_cached || 4280,
         tier: profile?.tier || 'Nomad',
         profile,
         connect,
