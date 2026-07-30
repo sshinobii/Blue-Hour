@@ -121,6 +121,17 @@ export default function HomePage() {
   const [promptInput, setPromptInput] = useState('');
   const [liveRoutes, setLiveRoutes] = useState<Route[]>([]);
   const [tick, setTick] = useState(0);
+  const [copiedCa, setCopiedCa] = useState(false);
+
+  const TOKEN_CA = '0x020c2252a8880e0e882957ee95421ca0f26e2742';
+
+  const handleCopyCa = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(TOKEN_CA);
+      setCopiedCa(true);
+      setTimeout(() => setCopiedCa(false), 2000);
+    }
+  };
 
   useEffect(() => {
     const loadRoutes = async () => {
@@ -246,6 +257,27 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* $HOUR TOKEN CONTRACT ADDRESS BANNER */}
+          <div className="bg-[#15150F] text-white py-3.5 px-6 border-t border-b border-[#E7E5D8] flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="bg-[#CCFF00] text-[#3A4A00] font-black text-[11.5px] px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                $HOUR Token
+              </div>
+              <span className="text-[13px] font-bold text-[#E7E5D8]">
+                Robinhood Chain CA:
+              </span>
+              <code className="text-[#CCFF00] font-mono text-[12.5px] bg-white/10 px-3 py-1 rounded-lg border border-white/15 tracking-tight select-all">
+                {TOKEN_CA}
+              </code>
+            </div>
+            <button
+              onClick={handleCopyCa}
+              className="bg-[#CCFF00] text-[#3A4A00] font-black text-[12px] px-4 py-1.5 rounded-full hover:opacity-90 transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+            >
+              {copiedCa ? '✓ Copied to clipboard' : 'Copy CA'}
+            </button>
           </div>
 
           {/* Neon ticker strip */}
