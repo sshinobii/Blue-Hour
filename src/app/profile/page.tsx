@@ -21,12 +21,13 @@ interface ChatMessage {
 
 function ProfileContent() {
   const searchParams = useSearchParams();
-  const { connected, publicKey, hourBalance, tier, profile } = useWallet();
+  const { connected, publicKey, userEmail, hourBalance, tier, profile } = useWallet();
 
   const [createdRoutes, setCreatedRoutes] = useState<Route[]>([]);
   const [ledger, setLedger] = useState<RewardLedgerItem[]>([]);
   const [stories, setStories] = useState<UserStory[]>([]);
-  
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   // Story modal state
   const [storyModalOpen, setStoryModalOpen] = useState(false);
   const [storyPhotoUrl, setStoryPhotoUrl] = useState('');
@@ -50,29 +51,43 @@ function ProfileContent() {
   ]);
 
   useEffect(() => {
-    if (!connected) return;
-    const loadProfileData = async () => {
-      const routes = await dbClient.getRoutes();
-      setCreatedRoutes(routes);
-      const userId = publicKey || 'usr_aura';
-      const ldg = await dbClient.getRewardLedger(userId);
-      setLedger(ldg);
+    if (!connected || !publicKey) {
+      setCreatedRoutes([]);
+      setLedger([]);
+      setStories([]);
+      setDataLoaded(true);
+      return;
+    }
 
-      const userStrs = await dbClient.getUserStories(userId);
-      setStories(userStrs);
+    const loadProfileData = async () => {
+      try {
+        // Load only THIS user's routes
+        const routes = await dbClient.getRoutesByCreator(publicKey);
+        setCreatedRoutes(routes);
+
+        const ldg = await dbClient.getRewardLedger(publicKey);
+        setLedger(ldg);
+
+        const userStrs = await dbClient.getUserStories(publicKey);
+        setStories(userStrs);
+      } catch (err) {
+        console.error('Error loading profile data:', err);
+      } finally {
+        setDataLoaded(true);
+      }
     };
+
     loadProfileData();
   }, [connected, publicKey]);
 
   const handlePostStory = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!storyPhotoUrl.trim()) return;
+    if (!storyPhotoUrl.trim() || !publicKey) return;
 
     setIsPostingStory(true);
     try {
-      const userId = publicKey || 'usr_aura';
       const newStory = await dbClient.createUserStory(
-        userId,
+        publicKey,
         storyPhotoUrl.trim(),
         storyCaption.trim() || null,
         storyRouteId || null
@@ -100,51 +115,34 @@ function ProfileContent() {
     setDailyMsgCount((prev) => prev + 1);
 
     try {
-      await new Promise((res) => setTimeout(res, 1500));
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: textToSend, userId: publicKey }),
+      });
 
-      const lower = textToSend.toLowerCase();
-      const isOffTopic = ['politics', 'election', 'stock market', 'code for me', 'who are you ai'].some((k) => lower.includes(k));
+      if (!res.ok) throw new Error('Chat API error');
 
-      if (isOffTopic) {
-        setMessages((prev) => [...prev, {
-          id: 'msg-res-' + Date.now(),
-          sender: 'agent',
-          text: "That's not my trail - I only talk travel. Where do you want to go?",
-        }]);
-        return;
-      }
-
-      const title = textToSend.length > 30 ? textToSend.slice(0, 30) + '...' : textToSend;
-      const createdRoute = await dbClient.createRoute(
-        {
-          creator_id: publicKey || 'usr_aura',
-          source: 'ai_agent',
-          title: `Route: ${title}`,
-          description: `Custom trail mapped by Wren based on: "${textToSend}"`,
-          mood_prompt: textToSend,
-          category: lower.includes('rail') ? 'Rail' : lower.includes('coast') || lower.includes('beach') ? 'Coast' : lower.includes('trail') || lower.includes('hike') ? 'Hiking' : 'Night city',
-          budget_amount: 750,
-          budget_currency: 'EUR',
-          days: 7,
-          cover_image_url: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=1200&auto=format&fit=crop',
-          status: 'published',
-        },
-        [
-          { order_index: 0, name: 'Secret Ridge Path', description: 'Unmarked scenic trail overlook', lat: 46.7712, lng: 23.6236, day_range: 'Day 1-2' },
-          { order_index: 1, name: 'Forest Tea House', description: 'Misty wooden lodge with fireplace', lat: 45.6427, lng: 25.5887, day_range: 'Day 3-5' },
-          { order_index: 2, name: 'Coastal Lantern Alley', description: 'Quiet seaside fishing haven', lat: 44.4268, lng: 26.1025, day_range: 'Day 6-7' },
-        ]
-      );
+      const data = await res.json();
+      const replyText = data.reply || data.message || 'Wren is thinking...';
 
       setMessages((prev) => [...prev, {
         id: 'msg-res-' + Date.now(),
         sender: 'agent',
-        text: `Mapped it: "${textToSend}". 3 quiet stops, around €750 for 7 days. Saved to your atlas!`,
-        routeCard: createdRoute,
+        text: replyText,
+        routeCard: data.route || undefined,
       }]);
-      setCreatedRoutes((prev) => [createdRoute, ...prev]);
+
+      if (data.route) {
+        setCreatedRoutes((prev) => [data.route, ...prev]);
+      }
     } catch (err) {
       console.error(err);
+      setMessages((prev) => [...prev, {
+        id: 'msg-err-' + Date.now(),
+        sender: 'agent',
+        text: 'Something went wrong on Wren\'s end. Try again in a moment.',
+      }]);
     } finally {
       setIsGenerating(false);
     }
@@ -167,7 +165,7 @@ function ProfileContent() {
         <main className="flex-1 flex items-center justify-center">
           <WalletGate
             title="Sign in to view Profile"
-            description="Access your saved journeys, proof gallery, stories, chat with Wren, and $HOUR token rewards on Robinhood Chain."
+            description="Access your saved journeys, proof gallery, stories, and chat with Wren on Robinhood Chain."
           />
         </main>
         <Footer />
@@ -175,7 +173,13 @@ function ProfileContent() {
     );
   }
 
-  const displayAddress = publicKey ? `${publicKey.slice(0, 5)}...${publicKey.slice(-4)}` : '0x8f2c...c91a';
+  const displayAddress = publicKey
+    ? `${publicKey.slice(0, 6)}...${publicKey.slice(-4)}`
+    : '';
+
+  const displayName = profile?.display_name
+    || (userEmail ? userEmail.split('@')[0] : null)
+    || (publicKey ? `${publicKey.slice(0, 6)}...${publicKey.slice(-4)}` : 'Wanderer');
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FBFAF3] text-[#15150F]">
@@ -186,46 +190,45 @@ function ProfileContent() {
             <h1 className="text-3xl md:text-4xl font-black tracking-tight">Profile</h1>
           </div>
 
-          {/* ASYMMETRIC TOP ROW: LEFT CARD & RIGHT CHAT */}
+          {/* ASYMMETRIC TOP ROW: LEFT PROFILE CARD & RIGHT CHAT */}
           <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-7 mb-10">
             {/* Left Profile Card */}
             <div className="bg-white border border-[#E7E5D8] rounded-[20px] p-6 flex flex-col justify-between">
               <div>
                 <div className="w-[64px] h-[64px] rounded-[16px] bg-[#15150F] text-[#CCFF00] flex items-center justify-center font-black text-[22px] mb-4">
-                  A
+                  {displayName.slice(0, 1).toUpperCase()}
                 </div>
-                <h2 className="text-[19px] font-black mb-0.5">{profile?.display_name || 'Aura_Wanderer'}</h2>
-                <div className="text-[12.5px] text-[#B4B2A4] font-mono mb-5">
-                  {displayAddress} · Robinhood Chain
-                </div>
+                <h2 className="text-[19px] font-black mb-0.5">{displayName}</h2>
+                {displayAddress && (
+                  <div className="text-[12.5px] text-[#B4B2A4] font-mono mb-5">
+                    {displayAddress} · Robinhood Chain
+                  </div>
+                )}
 
-                <div className="bg-[#CCFF00] rounded-[14px] p-4 mb-4 text-[#3A4A00]">
-                  <div className="flex justify-between items-baseline text-[12px] mb-1">
-                    <span>$HOUR balance</span>
-                    <span className="font-semibold">live price</span>
+                {/* Only show balance if > 0 (earned on-chain) */}
+                {hourBalance > 0 ? (
+                  <div className="bg-[#CCFF00] rounded-[14px] p-4 mb-4 text-[#3A4A00]">
+                    <div className="text-[12px] mb-1 font-semibold">USDC Balance</div>
+                    <div className="text-[26px] font-black mb-1">{hourBalance.toLocaleString()} USDC</div>
                   </div>
-                  <div className="text-[26px] font-black mb-1">{hourBalance.toLocaleString()} HOUR</div>
-                  <div className="flex justify-between text-[12px] font-bold border-t border-[#3A4A00]/20 pt-2">
-                    <span>Staked: 2,000</span>
-                    <span>Unstaked: {(hourBalance - 2000 > 0 ? hourBalance - 2000 : 0).toLocaleString()}</span>
+                ) : (
+                  <div className="bg-[#FBFAF3] border border-[#E7E5D8] rounded-[14px] p-4 mb-4 text-[#5B5B52] text-[13px]">
+                    Complete a route to earn your first USDC payout.
                   </div>
-                </div>
+                )}
               </div>
 
               <div className="flex items-center gap-2.5 text-[13px] text-[#5B5B52] pt-3 border-t border-[#E7E5D8]">
                 <b>Tier: {tier}</b>
-                <div className="flex-1 h-[6px] bg-[#E7E5D8] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#15150F]" style={{ width: '62%' }} />
-                </div>
-                <span className="text-[12px] font-bold">62%</span>
               </div>
             </div>
 
             {/* WREN CHAT PANEL */}
-            <div className="bg-white border border-[#E7E5D8] rounded-[20px] p-6 flex flex-col justify-between">
+            <div className="bg-white border border-[#E7E5D8] rounded-[20px] p-6 flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2.5">
                   <div className="w-9 h-9 rounded-full bg-[#15150F] border border-[#CCFF00] flex items-center justify-center overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/wren-mascot.png" alt="Wren" className="w-full h-full object-cover" />
                   </div>
                   <div>
@@ -293,95 +296,113 @@ function ProfileContent() {
             </div>
           </div>
 
-          {/* USER STORIES MASONRY PHOTO GRID */}
-          <div className="mb-12">
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <h2 className="text-xl font-black text-[#15150F]">My Travel Stories</h2>
-                <p className="text-[13px] text-[#5B5B52]">Moments captured on the trail - photos & stories from your journeys.</p>
-              </div>
-              <button
-                onClick={() => setStoryModalOpen(true)}
-                className="bg-[#15150F] text-[#CCFF00] px-4 py-2 rounded-full font-bold text-[13px] hover:opacity-90 transition-all flex items-center gap-1.5"
-              >
-                <Plus className="w-4 h-4" /> Post a story
-              </button>
-            </div>
-
-            {stories.length === 0 ? (
-              <div className="bg-white border border-[#E7E5D8] rounded-[16px] p-8 text-center text-[#5B5B52]">
-                No stories posted yet. Share your first moment from the trail!
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                {stories.map((story) => (
-                  <div key={story.id} className="bg-white border border-[#E7E5D8] rounded-[16px] overflow-hidden shadow-xs hover:border-[#15150F] transition-all flex flex-col">
-                    <div className="h-[200px] bg-[#E7E5D8] relative overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={story.photo_url} alt="Story photo" className="w-full h-full object-cover" />
-                    </div>
-                    {story.caption && (
-                      <div className="p-4 text-[13.5px] text-[#15150F] leading-relaxed flex-1">
-                        &quot;{story.caption}&quot;
-                      </div>
-                    )}
-                    {story.route_id && (
-                      <div className="px-4 pb-3">
-                        <Link href={`/routes/${story.route_id}`} className="text-[11.5px] font-bold text-[#3A4A00] bg-[#CCFF00]/40 px-2.5 py-1 rounded-full inline-block">
-                          Linked Route ↗
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Journeys & Ledger */}
-          <div className="space-y-4">
-            <div className="text-[12px] uppercase tracking-wider text-[#B4B2A4] font-extrabold mb-1">
-              Your Journeys & Saved Routes
-            </div>
-
-            {createdRoutes.map((route) => (
-              <div key={route.id} className="flex justify-between items-center bg-white border border-[#E7E5D8] rounded-[14px] p-4">
+          {/* MY TRAVEL STORIES - only visible if there are stories or user can add */}
+          {dataLoaded && (
+            <div className="mb-12">
+              <div className="flex justify-between items-center mb-4">
                 <div>
-                  <b className="block text-[14.5px] text-[#15150F]">{route.title}</b>
-                  <span className="text-[12.5px] text-[#B4B2A4]">
-                    {route.stops?.length || 0} stops · Category: {route.category}
-                  </span>
+                  <h2 className="text-xl font-black text-[#15150F]">My Travel Stories</h2>
+                  <p className="text-[13px] text-[#5B5B52]">Moments captured on the trail.</p>
                 </div>
-                <Link href={`/routes/${route.id}`} className="bg-[#CCFF00] text-[#3A4A00] text-[11.5px] px-3.5 py-1.5 rounded-full font-bold hover:opacity-90 transition-all">
-                  View
-                </Link>
+                <button
+                  onClick={() => setStoryModalOpen(true)}
+                  className="bg-[#15150F] text-[#CCFF00] px-4 py-2 rounded-full font-bold text-[13px] hover:opacity-90 transition-all flex items-center gap-1.5"
+                >
+                  <Plus className="w-4 h-4" /> Post a story
+                </button>
               </div>
-            ))}
 
-            {ledger.length > 0 && (
-              <div className="pt-6">
-                <div className="text-[12px] uppercase tracking-wider text-[#B4B2A4] font-extrabold mb-3">
-                  Onchain Reward Ledger (Robinhood Chain)
+              {stories.length === 0 ? (
+                <div className="bg-white border border-dashed border-[#E7E5D8] rounded-[16px] p-10 text-center text-[#B4B2A4]">
+                  <div className="text-[15px] font-bold mb-1">No stories yet</div>
+                  <div className="text-[13px]">Post your first trail photo to share with other wanderers.</div>
                 </div>
-                <div className="bg-white border border-[#E7E5D8] rounded-[16px] divide-y divide-[#E7E5D8]">
-                  {ledger.map((item) => (
-                    <div key={item.id} className="p-3.5 flex justify-between items-center text-[13px]">
-                      <div>
-                        <b className="block text-[#15150F] capitalize">{item.type.replace(/_/g, ' ')}</b>
-                        <a href={`https://explorer.robinhood.com/tx/${item.tx_hash}`} target="_blank" rel="noopener noreferrer" className="text-[11.5px] text-[#B4B2A4] font-mono hover:text-[#15150F] hover:underline">
-                          {item.tx_hash} ↗
-                        </a>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                  {stories.map((story) => (
+                    <div key={story.id} className="bg-white border border-[#E7E5D8] rounded-[16px] overflow-hidden shadow-xs hover:border-[#15150F] transition-all flex flex-col">
+                      <div className="h-[200px] bg-[#E7E5D8] relative overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={story.photo_url} alt="Story photo" className="w-full h-full object-cover" />
                       </div>
-                      <div className="text-right">
-                        <b className="text-[#3A4A00] font-black">+{item.amount} $HOUR</b>
-                        <span className="block text-[11px] text-[#B4B2A4] capitalize">{item.status}</span>
-                      </div>
+                      {story.caption && (
+                        <div className="p-4 text-[13.5px] text-[#15150F] leading-relaxed flex-1">
+                          &quot;{story.caption}&quot;
+                        </div>
+                      )}
+                      {story.route_id && (
+                        <div className="px-4 pb-3">
+                          <Link href={`/routes/${story.route_id}`} className="text-[11.5px] font-bold text-[#3A4A00] bg-[#CCFF00]/40 px-2.5 py-1 rounded-full inline-block">
+                            Linked Route ↗
+                          </Link>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
+              )}
+            </div>
+          )}
+
+          {/* MY ROUTES */}
+          {dataLoaded && (
+            <div className="space-y-4">
+              <div className="text-[12px] uppercase tracking-wider text-[#B4B2A4] font-extrabold mb-1">
+                Your Journeys & Saved Routes
               </div>
-            )}
-          </div>
+
+              {createdRoutes.length === 0 ? (
+                <div className="bg-white border border-dashed border-[#E7E5D8] rounded-[16px] p-10 text-center text-[#B4B2A4]">
+                  <div className="text-[15px] font-bold mb-1">No routes yet</div>
+                  <div className="text-[13px] mb-4">Chat with Wren or publish a route you know.</div>
+                  <Link href="/routes/create" className="bg-[#CCFF00] text-[#3A4A00] font-bold text-[13px] px-5 py-2.5 rounded-full inline-block hover:opacity-90 transition-all">
+                    Publish a route →
+                  </Link>
+                </div>
+              ) : (
+                createdRoutes.map((route) => (
+                  <div key={route.id} className="flex justify-between items-center bg-white border border-[#E7E5D8] rounded-[14px] p-4">
+                    <div>
+                      <b className="block text-[14.5px] text-[#15150F]">{route.title}</b>
+                      <span className="text-[12.5px] text-[#B4B2A4]">
+                        {route.stops?.length || 0} stops · Category: {route.category}
+                      </span>
+                    </div>
+                    <Link href={`/routes/${route.id}`} className="bg-[#CCFF00] text-[#3A4A00] text-[11.5px] px-3.5 py-1.5 rounded-full font-bold hover:opacity-90 transition-all">
+                      View
+                    </Link>
+                  </div>
+                ))
+              )}
+
+              {/* Reward Ledger - only if user has earned rewards */}
+              {ledger.length > 0 && (
+                <div className="pt-6">
+                  <div className="text-[12px] uppercase tracking-wider text-[#B4B2A4] font-extrabold mb-3">
+                    Onchain Reward Ledger
+                  </div>
+                  <div className="bg-white border border-[#E7E5D8] rounded-[16px] divide-y divide-[#E7E5D8]">
+                    {ledger.map((item) => (
+                      <div key={item.id} className="p-3.5 flex justify-between items-center text-[13px]">
+                        <div>
+                          <b className="block text-[#15150F] capitalize">{item.type.replace(/_/g, ' ')}</b>
+                          {item.tx_hash && (
+                            <a href={`https://explorer.robinhood.com/tx/${item.tx_hash}`} target="_blank" rel="noopener noreferrer" className="text-[11.5px] text-[#B4B2A4] font-mono hover:text-[#15150F] hover:underline">
+                              {item.tx_hash.slice(0, 16)}... ↗
+                            </a>
+                          )}
+                        </div>
+                        <div className="text-right">
+                          <b className="text-[#3A4A00] font-black">+{item.amount} USDC</b>
+                          <span className="block text-[11px] text-[#B4B2A4] capitalize">{item.status}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </section>
       </main>
 
@@ -423,19 +444,21 @@ function ProfileContent() {
                 />
               </div>
 
-              <div>
-                <label className="block text-[12.5px] font-bold text-[#15150F] mb-1">Link to Route (Optional)</label>
-                <select
-                  value={storyRouteId}
-                  onChange={(e) => setStoryRouteId(e.target.value)}
-                  className="w-full bg-[#FBFAF3] border border-[#E7E5D8] rounded-[10px] p-3 text-[13.5px] outline-none"
-                >
-                  <option value="">-- Select a route --</option>
-                  {createdRoutes.map((r) => (
-                    <option key={r.id} value={r.id}>{r.title}</option>
-                  ))}
-                </select>
-              </div>
+              {createdRoutes.length > 0 && (
+                <div>
+                  <label className="block text-[12.5px] font-bold text-[#15150F] mb-1">Link to Route (Optional)</label>
+                  <select
+                    value={storyRouteId}
+                    onChange={(e) => setStoryRouteId(e.target.value)}
+                    className="w-full bg-[#FBFAF3] border border-[#E7E5D8] rounded-[10px] p-3 text-[13.5px] outline-none"
+                  >
+                    <option value="">-- Select a route --</option>
+                    {createdRoutes.map((r) => (
+                      <option key={r.id} value={r.id}>{r.title}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               <button
                 type="submit"

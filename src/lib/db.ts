@@ -326,6 +326,22 @@ export const dbClient = {
     return routes;
   },
 
+  // Returns only routes created by a specific user
+  async getRoutesByCreator(creatorId: string): Promise<Route[]> {
+    if (isSupabaseConfigured && supabase) {
+      const { data, error } = await supabase
+        .from('routes')
+        .select('*, stops:route_stops(*), creator:profiles(*)')
+        .eq('creator_id', creatorId)
+        .order('created_at', { ascending: false });
+      if (!error && data) return data as Route[];
+      return [];
+    }
+    // Offline fallback: only return routes that truly belong to this user
+    const routes = getLocalStorage<Route[]>('bh_routes_v2', []);
+    return routes.filter(r => r.creator_id === creatorId);
+  },
+
   async getRouteById(id: string): Promise<Route | null> {
     if (isSupabaseConfigured && supabase) {
       const { data, error } = await supabase
@@ -474,19 +490,8 @@ export const dbClient = {
       const { data, error } = await supabase.from('reward_ledger').select('*').eq('user_id', userId).order('created_at', { ascending: false });
       if (!error && data) return data as RewardLedgerItem[];
     }
-    const ledgerMap = getLocalStorage<Record<string, RewardLedgerItem[]>>('bh_reward_ledger', {
-      'usr_aura': [
-        {
-          id: 'ldg-1',
-          user_id: 'usr_aura',
-          type: 'completion_reward',
-          amount: 180,
-          tx_hash: '0x3a4f...91bc',
-          status: 'success',
-          created_at: new Date().toISOString()
-        }
-      ]
-    });
+    // Only return existing ledger items — no seeded mock data for new users
+    const ledgerMap = getLocalStorage<Record<string, RewardLedgerItem[]>>('bh_reward_ledger', {});
     return ledgerMap[userId] || [];
   },
 
@@ -522,33 +527,17 @@ export const dbClient = {
   },
 
   // User Profile
-  async getProfile(userId: string): Promise<Profile> {
+  async getProfile(userId: string): Promise<Profile | null> {
     if (isSupabaseConfigured && supabase) {
       const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
       if (!error && data) return data as Profile;
+      // Profile doesn't exist yet in Supabase — return null (no fake data)
+      if (error?.code === 'PGRST116') return null;
     }
 
-    const profilesMap = getLocalStorage<Record<string, Profile>>('bh_profiles_v2', {
-      'usr_aura': INITIAL_PROFILES[0]
-    });
-
-    if (!profilesMap[userId]) {
-      const newProfile: Profile = {
-        id: userId,
-        display_name: 'Nomad_' + userId.slice(-4),
-        avatar_url: null,
-        wallet_address: userId.startsWith('0x') ? userId : `0x${userId.slice(0, 8)}...`,
-        external_wallet_address: null,
-        tier: 'Nomad',
-        hour_balance_cached: 100,
-        created_at: new Date().toISOString()
-      };
-      profilesMap[userId] = newProfile;
-      setLocalStorage('bh_profiles_v2', profilesMap);
-      return newProfile;
-    }
-
-    return profilesMap[userId];
+    // Offline/no-Supabase fallback: only return a profile that was explicitly saved
+    const profilesMap = getLocalStorage<Record<string, Profile>>('bh_profiles_v2', {});
+    return profilesMap[userId] || null;
   },
 
   // User Stories
@@ -560,25 +549,8 @@ export const dbClient = {
       if (!error && data) return data as UserStory[];
     }
 
-    const stories = getLocalStorage<UserStory[]>('bh_user_stories', [
-      {
-        id: 'stry-1',
-        user_id: 'usr_aura',
-        route_id: 'ghost-romania',
-        photo_url: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=800&auto=format&fit=crop',
-        caption: 'Misty morning espresso at 6:00 AM before taking the train through Transylvania.',
-        created_at: new Date().toISOString()
-      },
-      {
-        id: 'stry-2',
-        user_id: 'usr_aura',
-        route_id: 'italy-coast',
-        photo_url: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=800&auto=format&fit=crop',
-        caption: 'Watching Mount Etna smoke across the sea from Calabria coast.',
-        created_at: new Date().toISOString()
-      }
-    ]);
-
+    // Offline fallback: no seeded mock stories — return only real user-created stories
+    const stories = getLocalStorage<UserStory[]>('bh_user_stories', []);
     if (userId) {
       return stories.filter(s => s.user_id === userId);
     }

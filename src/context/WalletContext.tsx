@@ -6,7 +6,7 @@ import { dbClient, Profile } from '@/lib/db';
 
 interface WalletContextType {
   connected: boolean;
-  publicKey: string | null; // Embedded wallet address on Robinhood Chain
+  publicKey: string | null;
   userEmail: string | null;
   hourBalance: number;
   tier: string;
@@ -27,24 +27,22 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     privyAuth = null;
   }
 
-  const [mockConnected, setMockConnected] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
 
   const isPrivyAvailable = Boolean(privyAuth && privyAuth.ready);
 
-  const connected = isPrivyAvailable
-    ? (privyAuth!.authenticated || mockConnected)
-    : mockConnected;
+  // Only connected via real Privy auth — no mock fallback
+  const connected = isPrivyAvailable ? privyAuth!.authenticated : false;
 
   const publicKey = isPrivyAvailable && privyAuth!.user?.wallet?.address
     ? privyAuth!.user.wallet.address
-    : (mockConnected ? '0x5b78709bF844d5aD0d46f40b2D7f32394F70C246' : null);
+    : null;
 
   const userEmail = isPrivyAvailable && privyAuth!.user?.email?.address
     ? privyAuth!.user.email.address
-    : (mockConnected ? 'traveler@bluehour.io' : null);
+    : null;
 
-  const userId = publicKey || (mockConnected ? 'usr_aura' : null);
+  const userId = publicKey || null;
 
   const refreshProfile = useCallback(async () => {
     if (connected && userId) {
@@ -68,27 +66,17 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [refreshProfile]);
 
   const connect = () => {
+    // Only trigger real Privy login — never auto-connect
     if (privyAuth && typeof privyAuth.login === 'function') {
-      try {
-        privyAuth.login();
-        return;
-      } catch (err) {
-        console.warn('Privy login invocation fallback:', err);
-      }
+      privyAuth.login();
     }
-    // Reliable fallback if Privy is initializing or unavailable
-    setMockConnected(true);
   };
 
   const disconnect = () => {
-    if (privyAuth && typeof privyAuth.logout === 'function' && privyAuth.authenticated) {
-      try {
-        privyAuth.logout();
-      } catch (err) {
-        console.warn('Privy logout error:', err);
-      }
+    if (privyAuth && typeof privyAuth.logout === 'function') {
+      privyAuth.logout();
     }
-    setMockConnected(false);
+    setProfile(null);
   };
 
   return (
@@ -97,7 +85,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         connected,
         publicKey,
         userEmail,
-        hourBalance: profile?.hour_balance_cached || 4280,
+        hourBalance: profile?.hour_balance_cached || 0,
         tier: profile?.tier || 'Nomad',
         profile,
         connect,
