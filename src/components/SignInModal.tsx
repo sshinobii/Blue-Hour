@@ -34,7 +34,7 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
           {/* Left Art Panel */}
           <div className="relative min-h-[260px] md:min-h-[460px] bg-gradient-to-br from-[#FFE7A8] via-[#F3A9C1] to-[#9FD8E8] p-7 flex flex-col justify-end">
             <div className="bg-white/85 backdrop-blur-md rounded-[16px] p-4 text-[13.5px] text-[#15150F] leading-relaxed shadow-sm">
-              &quot;Mapped a Carpathian rail route in 38 seconds. Best €650 I&apos;ve spent.&quot;
+              &quot;Mapped a Japanese alpine rail route in 38 seconds. Best €650 I&apos;ve spent.&quot;
               <div className="text-[#5B5B52] text-[12px] font-bold mt-1">- Aura_Wanderer</div>
             </div>
           </div>

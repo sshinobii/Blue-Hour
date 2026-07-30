@@ -52,8 +52,8 @@ function WrenOrbitIllustration() {
 // ─── Sample Wren conversation ──────────────────────────────────────────────────
 const DEMO_MESSAGES = [
   { sender: 'user', text: 'I want something foggy, slow trains, mountain towns, under €700, 7 days' },
-  { sender: 'wren', text: 'Here\'s what I\'m seeing for you: Lviv → Chernivtsi → Cluj-Napoca by overnight sleeper. Three mountain towns, three distinct energy types — bohemian, Habsburg, and gothic forest.' },
-  { sender: 'wren', text: 'Day 1-2: Lviv old town after midnight. Day 3: slow train through Carpathian valleys. Day 4-5: Chernivtsi art nouveau streets. Day 6-7: Cluj hidden clubs and salt mine day trips. Total budget: €640 with a €60 buffer.' },
+  { sender: 'wren', text: 'Here\'s what I\'m seeing for you: Kyoto → Takayama → Kanazawa by local sleeper train. Three alpine stops, three distinct energy types — ancient cedar, mountain fog, and lantern alleys.' },
+  { sender: 'wren', text: 'Day 1-2: Kyoto back alleys after midnight. Day 3: slow train through Japanese Alps. Day 4-5: Takayama wooden tea houses & morning markets. Day 6-7: Kanazawa castle gardens & vinyl bars. Total budget: €640 with a €60 buffer.' },
 ];
 
 // ─── Main Content ─────────────────────────────────────────────────────────────
