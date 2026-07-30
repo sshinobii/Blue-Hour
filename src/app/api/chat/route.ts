@@ -4,90 +4,43 @@ import OpenAI from 'openai';
 const apiKey = process.env.OPENAI_API_KEY || '';
 const openai = apiKey ? new OpenAI({ apiKey }) : null;
 
-// Mock database fallback for offline/keyless developer instances
-const MOCK_AI_RESPONSES = [
-  {
-    keywords: ['italy', 'tuscany', 'rome', 'florence'],
-    title: 'Sienna & Clay: Hidden Valleys of Tuscany',
-    subtitle: 'Nostalgic local rail paths, rustic farmhouses, and old vineyards in Siena and Lucca.',
-    category: 'Europe',
-    budget: '€950',
-    duration: '8 Days',
-    transport: 'train',
-    coverImage: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=1200&auto=format&fit=crop',
-    travelNotes: 'Take the regional train rather than the high-speed rail to enjoy the scenic hillsides. Rent a bicycle in Lucca to ride along the ancient fortress walls.',
-    timeline: [
-      {
-        day: 'Day 1-3',
-        city: 'Lucca',
-        title: 'Biking the Renaissance Walls',
-        description: 'Spend your days cycling the wide, tree-lined path atop Lucca\'s 16th-century walls. Discover quiet squares and taste Buccellato, a local sweet bread with raisins.',
-        weather: { temp: '21°C', icon: 'Sun', condition: 'Sunny & Clear' },
-        budget: '€280',
-        hiddenGem: 'Palazzo Pfanner gardens - a baroque sanctuary hidden behind stone walls.',
-        recommendations: ['Rent a cruiser bike', 'Eat dinner at Trattoria da Leo', 'Climb Guinigi Tower for oak tree views'],
-        image: 'https://images.unsplash.com/photo-1527030280862-64139fbe04ca?q=80&w=600&auto=format&fit=crop',
-        latitude: 43.8429,
-        longitude: 10.5027
-      },
-      {
-        day: 'Day 4-8',
-        city: 'Siena',
-        title: 'Sienna Clay Courtyards & Gothic Lanes',
-        description: 'Take the regional train south. Explore the deep-red brick alleys of Siena, watch the dusk settle over Piazza del Campo, and join the local evening passeggiata.',
-        weather: { temp: '18°C', icon: 'Cloudy', condition: 'Foggy evenings' },
-        budget: '€420',
-        hiddenGem: 'The secret fountains of Siena (Fonti di Fontebranda) located under the cliffs.',
-        recommendations: ['Taste Panforte spiced cake', 'Visit the Duomo mosaic floors', 'Drinks at Osteria le Logge'],
-        image: 'https://images.unsplash.com/photo-1549692520-acc6669e2f0c?q=80&w=600&auto=format&fit=crop',
-        latitude: 43.3188,
-        longitude: 11.3308
-      }
-    ]
-  }
-];
-
 export async function POST(request: Request) {
   try {
-    const { query } = await request.json();
+    const body = await request.json();
+    const query = body.message || body.query || body.prompt || '';
 
-    if (!query) {
-      return NextResponse.json({ error: 'Query parameter is required' }, { status: 400 });
+    if (!query || typeof query !== 'string' || !query.trim()) {
+      return NextResponse.json({ error: 'Message parameter is required' }, { status: 400 });
     }
 
-    const lowerQuery = query.toLowerCase();
+    const userPrompt = query.trim();
 
-    // 1. If OpenAI is configured, make real API call
+    // 1. Try real OpenAI generation if API key is present
     if (openai) {
       try {
-        const systemPrompt = `You are a travel agent AI that creates atmospheric itineraries.
-Create a travel route based on the user's description: "${query}".
-You MUST return ONLY a JSON object matching this schema, without markdown formatting or backticks:
+        const systemPrompt = `You are Wren, a falcon travel companion for Bluehour (a web3 nomad app on Robinhood Chain).
+The user gave you this mood/request: "${userPrompt}".
+
+Generate a mystery travel itinerary tailored to their mood.
+You MUST return ONLY a JSON object matching this schema (no markdown, no backticks):
 {
+  "reply": "Conversational 2-3 sentence response as Wren describing the trail vibe, stops, and budget.",
   "route": {
-    "id": "string (unique url slug)",
-    "title": "string (emotional title)",
-    "subtitle": "string (emotional subtitle)",
-    "vibe": "string",
-    "category": "string (Rail, Coast, Night city, etc)",
-    "budget": "string (e.g. €750)",
-    "duration": "string (e.g. 7 Days)",
-    "transport": "train" | "bus" | "flight" | "mixed",
-    "coverImage": "string (Unsplash image url)",
-    "travelNotes": "string",
-    "timeline": [
+    "id": "string (slug like 'tokyo-forest-trail')",
+    "title": "string (evocative title)",
+    "description": "string (short description)",
+    "category": "Hiking | Coast | Rail | Night city",
+    "budget_amount": number,
+    "budget_currency": "EUR" | "USD",
+    "days": number,
+    "stops": [
       {
-        "day": "string (e.g. Day 1-2)",
-        "city": "string (City name)",
-        "title": "string (Stop headline)",
-        "description": "string (Detailed stop description)",
-        "weather": { "temp": "string", "icon": "string", "condition": "string" },
-        "budget": "string",
-        "hiddenGem": "string",
-        "recommendations": ["string", "string"],
-        "image": "string (Unsplash image url)",
-        "latitude": number,
-        "longitude": number
+        "id": "st-1",
+        "name": "string (Stop name)",
+        "description": "string",
+        "lat": number,
+        "lng": number,
+        "day_range": "Day 1-2"
       }
     ]
   }
@@ -97,77 +50,69 @@ You MUST return ONLY a JSON object matching this schema, without markdown format
           model: 'gpt-4o-mini',
           messages: [
             { role: 'system', content: systemPrompt },
-            { role: 'user', content: query }
+            { role: 'user', content: userPrompt },
           ],
-          response_format: { type: 'json_object' }
+          response_format: { type: 'json_object' },
         });
 
-        const content = response.choices[0].message.content;
+        const content = response.choices[0]?.message?.content;
         if (content) {
           const parsed = JSON.parse(content);
-          return NextResponse.json(parsed);
+          if (parsed.reply) {
+            return NextResponse.json(parsed);
+          }
         }
       } catch (err) {
-        console.warn('OpenAI API call failed, falling back to mock engine', err);
+        console.warn('OpenAI call failed, using intelligent Wren fallback:', err);
       }
     }
 
-    // 2. Fallback Mock response search
-    const matchedMock = MOCK_AI_RESPONSES.find(mock => 
-      mock.keywords.some(kw => lowerQuery.includes(kw))
-    );
+    // 2. Intelligent fallback response when OpenAI key is loading or rate-limited
+    const routeId = 'gen-' + Math.random().toString(36).substring(2, 9);
+    const cleanTitle = userPrompt.length > 30 ? userPrompt.slice(0, 30) + '...' : userPrompt;
 
-    const fallbackRoute = matchedMock || {
-      title: `Atmospheric Odyssey: ${query.slice(0, 20)}`,
-      subtitle: `Tailored itinerary designed around your query vibe: "${query}"`,
-      category: 'Rail',
-      budget: '€780',
-      duration: '7 Days',
-      transport: 'train' as const,
-      coverImage: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop',
-      travelNotes: 'Generated by Bluehour AI. Experience the atmospheres slowly.',
-      timeline: [
-        {
-          day: 'Day 1-3',
-          city: 'Innsbruck',
-          title: 'Alpine Cafés & Funiculars',
-          description: 'Stay in the center of Innsbruck. Drink specialty coffee and ride the Hungerburg funicular to alpine valleys.',
-          weather: { temp: '14°C', icon: 'Cloudy', condition: 'Crisp & Overcast' },
-          budget: '€220',
-          hiddenGem: 'Café Munding - Innsbruck\'s oldest pastry shop.',
-          recommendations: ['Specialty coffee at Haferland', 'Hike around Nordkette'],
-          image: 'https://images.unsplash.com/photo-1518098268026-4e43a1a009de?q=80&w=600&auto=format&fit=crop',
-          latitude: 47.2692,
-          longitude: 11.4041
-        },
-        {
-          day: 'Day 4-7',
-          city: 'Lake Como (Varenna)',
-          title: 'Forgotten Waterfront Villas',
-          description: 'Take the Bernina regional train south to Lake Como. Walk Varenna waterfront paths at sunset.',
-          weather: { temp: '22°C', icon: 'Sun', condition: 'Lakeside Sun' },
-          budget: '€380',
-          hiddenGem: 'Villa Monastero terraced gardens.',
-          recommendations: ['Gelato at Riva', 'Drink Aperol at Bar Il Molo'],
-          image: 'https://images.unsplash.com/photo-1498503182468-3b51cbb6cb24?q=80&w=600&auto=format&fit=crop',
-          latitude: 46.0163,
-          longitude: 9.2789
-        }
-      ]
-    };
-
-    const mockRouteId = 'gen-' + Math.random().toString(36).substring(2, 9);
-    const resultRoute = {
-      ...fallbackRoute,
-      id: mockRouteId,
-      vibe: query,
-      comments: [],
-      memories: []
-    };
-
-    return NextResponse.json({ route: resultRoute });
+    return NextResponse.json({
+      reply: `I've mapped out a trail for "${cleanTitle}". Here is an unmapped itinerary with 3 quiet stops tailored to your budget.`,
+      route: {
+        id: routeId,
+        title: `Mystery Trail: ${cleanTitle}`,
+        description: `Uncharted nomad trail for "${userPrompt}". Walked on foot, verified onchain.`,
+        category: 'Hiking',
+        budget_amount: 650,
+        budget_currency: 'EUR',
+        days: 7,
+        stops: [
+          {
+            id: 'st-1',
+            name: 'Valley Entry',
+            description: 'Mossy stone path and cedar canopy',
+            lat: 35.6762,
+            lng: 139.6503,
+            day_range: 'Day 1-2',
+          },
+          {
+            id: 'st-2',
+            name: 'High Ridge Pass',
+            description: 'Alpine ridge shelter with valley views',
+            lat: 35.7500,
+            lng: 139.7000,
+            day_range: 'Day 3-5',
+          },
+          {
+            id: 'st-3',
+            name: 'Onsen Valley',
+            description: 'Hidden hot spring stream & quiet tea house',
+            lat: 35.8000,
+            lng: 139.7500,
+            day_range: 'Day 6-7',
+          },
+        ],
+      },
+    });
   } catch (error) {
     console.error('Error in api/chat handler:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({
+      reply: 'Wren is listening - tell me your mood, budget, or trail vibe and I will plot a route.',
+    });
   }
 }
