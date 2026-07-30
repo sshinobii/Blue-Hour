@@ -51,9 +51,9 @@ function WrenOrbitIllustration() {
 
 // ─── Sample Wren conversation ──────────────────────────────────────────────────
 const DEMO_MESSAGES = [
-  { sender: 'user', text: 'I want something foggy, slow trains, mountain towns, under €700, 7 days' },
-  { sender: 'wren', text: 'Here\'s what I\'m seeing for you: Kyoto → Takayama → Kanazawa by local sleeper train. Three alpine stops, three distinct energy types — ancient cedar, mountain fog, and lantern alleys.' },
-  { sender: 'wren', text: 'Day 1-2: Kyoto back alleys after midnight. Day 3: slow train through Japanese Alps. Day 4-5: Takayama wooden tea houses & morning markets. Day 6-7: Kanazawa castle gardens & vinyl bars. Total budget: €640 with a €60 buffer.' },
+  { sender: 'user', text: 'I want something foggy, mountain trails, quiet ridge walks, under €700, 7 days' },
+  { sender: 'wren', text: 'Here\'s what I\'m seeing for you: Kumano Kodo Forest Trek — Nakahechi Pass → Kogenchi Ridge → Hongu Valley. Three mountain trail sections walked entirely on foot, three distinct energy types — ancient cedar, high ridge fog, and hidden waterfall valleys.' },
+  { sender: 'wren', text: 'Day 1-2: Nakahechi ancient stone paths on foot. Day 3-4: Kogenchi high ridge trail & wooden mountain shelters. Day 5-7: Hongu valley trail & quiet cedar bathhouse finish. Total budget: €640 with a €60 buffer.' },
 ];
 
 // ─── Main Content ─────────────────────────────────────────────────────────────

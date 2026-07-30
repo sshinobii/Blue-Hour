@@ -147,8 +147,8 @@ export default function HomePage() {
   };
 
   const featuredRoute = liveRoutes[0] || {
-    id: 'alpine-japan',
-    title: 'Kyoto Alleys & Alpine Night Rail',
+    id: 'kumano-trek',
+    title: 'Kumano Kodo Ancient Forest Trek',
     stops: [1, 2, 3],
     creator_id: 'usr_aura',
   };
@@ -209,9 +209,9 @@ export default function HomePage() {
                 <div className="flex gap-2 flex-wrap">
                   {[
                     'unmarked forest paths & mountain cabins',
-                    'rainy Tokyo cafes & vinyl alleys',
-                    'hidden coast, zero tourists',
-                    'Japanese alpine night trains',
+                    'high alpine ridge walks & wooden shelters',
+                    'coastal cliff trekking, zero tourists',
+                    'ancient forest trails on foot',
                   ].map((chip) => (
                     <button
                       key={chip}
@@ -482,7 +482,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Big card */}
-            <Link href="/routes/alpine-japan" className="md:col-span-7 bg-white border border-[#E7E5D8] rounded-[28px] overflow-hidden group hover:border-[#CCFF00] transition-all shadow-xs flex flex-col">
+            <Link href="/routes/kumano-trek" className="md:col-span-7 bg-white border border-[#E7E5D8] rounded-[28px] overflow-hidden group hover:border-[#CCFF00] transition-all shadow-xs flex flex-col">
               <div className="h-[200px] bg-[#F4F3E8] relative overflow-hidden flex items-end p-6">
                 {/* SVG illustration */}
                 <div className="absolute inset-0 opacity-60">
@@ -502,8 +502,8 @@ export default function HomePage() {
               </div>
               <div className="p-7 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-2xl font-black mb-2 text-[#15150F] group-hover:text-[#3A4A00] transition-colors">Kyoto Alleys & Alpine Night Rail</h3>
-                  <p className="text-[14px] text-[#5B5B52] leading-relaxed">Misty bamboo forests, mountain night trains, cedar bathhouses, and quiet vinyl bars in Takayama.</p>
+                  <h3 className="text-2xl font-black mb-2 text-[#15150F] group-hover:text-[#3A4A00] transition-colors">Kumano Kodo Ancient Forest Trek</h3>
+                  <p className="text-[14px] text-[#5B5B52] leading-relaxed">Ancient stone paths, high mountain ridges, cedar forest shelters, and quiet waterfall passes walked entirely on foot.</p>
                 </div>
                 <div className="flex items-center justify-between text-[12.5px] text-[#B4B2A4] border-t border-[#E7E5D8] pt-4 mt-5">
                   <span>8 days · 3 stops</span>
