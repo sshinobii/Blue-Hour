@@ -14,9 +14,12 @@ export const SignInModal: React.FC<SignInModalProps> = ({ isOpen, onClose }) => 
 
   if (!isOpen) return null;
 
-  const handleAction = () => {
-    connect();
-    onClose();
+  const handleAction = async () => {
+    try {
+      await connect();
+    } finally {
+      onClose();
+    }
   };
 
   return (
